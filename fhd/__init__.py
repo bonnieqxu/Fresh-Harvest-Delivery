@@ -25,4 +25,5 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(national_manager, url_prefix="/national_manager")
     app.register_blueprint(staff, url_prefix="/staff")
+
     return app

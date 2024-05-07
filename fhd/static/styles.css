@@ -1,0 +1,130 @@
+.main-top {
+    background-color: rgba(0, 0, 0, 0.87); 
+    color: white; 
+}
+.phone-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px; 
+    text-align: right;
+}
+
+.phone-box p {
+    margin: 0; 
+}
+
+.phone-box ul {
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+}
+
+.phone-box ul li {
+    display: inline-block; 
+    margin-right: 10px; 
+}
+.phone-box.links {
+    display: flex;
+    justify-content: flex-end; /* 将链接靠右对齐 */
+    padding: 0;
+}
+
+
+.banner {
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.banner img {
+    width: 100%;
+    height: auto;
+}
+.banner-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+}
+.banner-text h1 {
+    font-size: 4em; /* initial size*/
+    margin-bottom: 20px;
+}
+.banner-text p {
+    margin-bottom: 0;
+}
+@media (max-width: 480px) {
+    .banner-text h1 {
+        font-size: 1em; /* small screen */
+    }
+}
+@media  (min-width: 481px) and (max-width: 768px) {
+    .banner-text h1 {
+        font-size: 2em; /* medium screen */
+    }
+}
+@media (min-width: 769px) and (max-width: 1024px) {
+    .banner-text h1 {
+        font-size: 3em; /* large screen */
+    }
+}
+
+@media (min-width: 1025px) {
+    .banner-text h1 {
+        font-size: 5em; /* x large */
+    }
+}
+
+.banner-text .btn {
+    background-color: #49372bce;
+    color: white;
+    padding: 10px 20px; 
+    text-decoration: none; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s;
+}
+
+.banner-text .btn:hover {
+    background-color: #b0eb51da;
+}
+
+
+
+.categories-shop {
+    padding-top: 100px;
+}
+
+.categories-shop h2 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.btn.hvr-hover {
+    background-color: #eb9257;
+    color: white;
+    padding: 10px 20px;
+    display: block;
+    margin: 0 auto; 
+    text-align: center; 
+    font-weight: bold; 
+    font-size: 1.2em; 
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.87); 
+    color: white; 
+    height: 50px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-top: auto; 
+    padding-top: 20px;
+    margin-top: 80px;
+}
+
+

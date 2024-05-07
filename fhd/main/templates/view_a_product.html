@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <h1>{{ product[0] }}</h1>
+    <hr>
+    <div class="row">
+        <div class="col-lg-6">
+            {% if product[2] %}
+            <img class="featurette-image img-fluid mx-auto" width="400px" height="400px"
+                src="data:image/jpeg;base64,{{ product[2] }}" alt="{{ product[0] }}">
+            {% else %}
+            <div class="featurette-image img-fluid mx-auto"
+                style="width: 400px; height:400px; display: flex; align-items: center; justify-content: center; background-color: #f0f0f0; border: 1px dashed #ccc;">
+                <span style="color: #aaa;">Image coming soon</span>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-lg-6">
+            <h4> {{ product[0] }}</h4> <!-- name -->
+            <small>{{ product[-2] }} {{ product[-1] }}</small> <!-- weight -->
+            <h4> ${{ product[1] }}</h4> <!-- price -->
+            <p> {{ product[3] }}</p>
+        </div>
+    </div>
+    <!-- Impacts Section Full-Width -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <h3>Placeholder</h3>
+            <p>Information provided on this page is supplied to assist our customers to select suitable products. However, products and
+            their ingredients are liable to change at short notice, which may affect nutritional, country of origin, ingredient and
+            allergen information. Therefore, you should always check product labels before consuming. If you require specific
+            information to assist in your purchasing decision, we recommend that you make further enquiries of the manufacturer (see
+            contact details on the packaging) or contact us on 0800 000000.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

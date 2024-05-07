@@ -1,4 +1,65 @@
 {% extends "base.html" %}
 {% block title %}{% endblock %}
 {% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <h1>Placeholder</h1>
+        <hr>
+        <div class="album py-2">
+            {% if products %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+                {% for product in products %}
+                <div class="card shadow-sm">
+                    {% if product[-2] %}
+                    <a href="{{ url_for('main.view_product', product_id=product[0]) }}">
+                        <img class="bd-placeholder-img card-img-top" width="100%" height="300px"
+                            src="data:image/jpeg;base64,{{ product[-2] }}" alt="Uploaded Image"></a>
+                    {% else %}
+                    <!-- Placeholder when there's no image -->
+                    <div
+                        style="width: 100%; height: 300px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                        <span style="color: #ccc;">Image coming soon</span>
+                    </div>
+                    {% endif %}
+                    <a href="{{ url_for('main.view_product', product_id=product[0]) }}">
+                        <p>{{ product[1] }}</p>
+                    </a>
+
+                    <div class="d-flex justify-content-between align-items-center" style="padding-bottom: 5px;">
+                        <div class="btn-group">
+                            <a href="{{ url_for('customer.addItem', product_name=product[0]) }}"
+                                class="btn btn-sm btn-primary">Add to cart</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info" role="alert">
+                No products found.
+            </div>
+            {% endif %}
+
+            <!-- Pagination -->
+            <nav aria-label="Product navigation" style="margin-top: 20px;">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                    <li class="page-item"><a class="page-link"
+                            href="{{ url_for('main.view_products', page=page-1) }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {{ 'active' if p == page else '' }}">
+                        <a class="page-link" href="{{ url_for('main.view_products', page=p) }}">{{ p }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if page < total_pages %} <li class="page-item"><a class="page-link"
+                            href="{{ url_for('main.view_products', page=page+1) }}">Next</a></li>
+                        {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

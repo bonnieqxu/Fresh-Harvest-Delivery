@@ -1,4 +1,4 @@
-import connect
+import fhd.connect as connect
 import mysql.connector
 
 # For database connection
@@ -14,3 +14,13 @@ def getCursor():
                                          database=connect.dbname, autocommit=True)
     dbconn = connection.cursor()
     return dbconn
+
+
+# depot names
+def query_depot_names():
+    cursor = getCursor()
+    cursor.execute("SELECT location_name FROM depot")
+    depot_names = [row[0] for row in cursor.fetchall()]
+
+    cursor.close()
+    return depot_names
