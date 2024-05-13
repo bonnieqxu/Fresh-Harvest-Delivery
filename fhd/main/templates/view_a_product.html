@@ -2,6 +2,13 @@
 {% block title %}{% endblock %}
 {% block content %}
 <div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-12">
+            <a href="javascript:history.back()" 
+            style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+           << Continue Shopping</a>
+        </div>
+    </div>
     <h1>{{ product[0] }}</h1>
     <hr>
     <div class="row">
@@ -21,18 +28,37 @@
             <small>{{ product[-2] }} {{ product[-1] }}</small> <!-- weight -->
             <h4> ${{ product[1] }}</h4> <!-- price -->
             <p> {{ product[3] }}</p>
+            <div class="d-flex align-items-center" style="padding-bottom: 5px; flex-direction: row;">
+                <label for="quantity_{{ product_id }}">Quantity:</label>
+                <input type="number" id="quantity_{{ product_id }}" name="quantity_{{ product_id }}" min="1" value="1" style="width: 3em; margin-left: 5px; margin-right: 5px;">
+            </div>
+            <br>
+            <div class="d-flex align-items-center" style="padding-bottom: 5px; flex-direction: row;">
+                <a href="#" onclick="addToCart('{{ product_id }}');" class="btn btn-sm btn-primary">Add to cart</a>
+            </div>
         </div>
-    </div>
-    <!-- Impacts Section Full-Width -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <h3>Placeholder</h3>
-            <p>Information provided on this page is supplied to assist our customers to select suitable products. However, products and
-            their ingredients are liable to change at short notice, which may affect nutritional, country of origin, ingredient and
-            allergen information. Therefore, you should always check product labels before consuming. If you require specific
-            information to assist in your purchasing decision, we recommend that you make further enquiries of the manufacturer (see
-            contact details on the packaging) or contact us on 0800 000000.</p>
-        </div>
+       
     </div>
 </div>
+
+<script>
+    function addToCart(product_id) {
+        var quantityInputId = 'quantity_' + product_id; // Construct the ID of the quantity input field based on the product ID
+        var quantity = document.getElementById(quantityInputId).value; // Get the quantity from the input field associated with the product
+
+        if (quantity.trim() === '') {
+            alert('Please enter a quantity before adding to cart.');
+            return false;
+        }
+
+        var url = "{{ url_for('customer.addItem', product_id='__product_id__') }}";
+        url = url.replace('__product_id__', product_id);
+
+        // Append the quantity to the URL
+        url += "?quantity=" + encodeURIComponent(quantity);
+
+        // Navigate to the URL
+        window.location.href = url;
+    }
+</script>
 {% endblock %}

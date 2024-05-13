@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+<script>
+    function confirmDelete(deleteUrl) {
+        if (confirm("Are you sure you want to delete this product type?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Product Type</h1>
+            <hr>
+            <div class="container">
+                <div class="ml-auto d-flex">
+                  <a href="{{ url_for('local_manager.add_product_type') }}" class="btn btn-primary" role="button">Add New Product Type</a>
+              </div>
+              <div class="container content" style="flex: 1 0 auto;">
+                <div class="row">
+                  <div class="col-lg-8 offset-lg-2 my-5">
+                  <form method="POST" action="{{ url_for('local_manager.search_product_type') }}">
+                    {{ form.csrf_token }}
+                    <div class="form-group mb-3">
+                      {{ form.product_name.label }}
+                      {{ form.product_name(class="form-control") }}
+                  </div>
+                  <div class="form-group mb-3">
+                      {{ form.product_category.label }}
+                      {{ form.product_category(class="form-control") }}
+                  </div>
+                  <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                </div>
+              </form>
+              </div>
+                  <br>
+                      <div class="row">
+                        <div class="col-12">
+                          <table class="table table-striped table-hover">
+                              <tr class="table-primary">
+                                  <th>Product Type Image</th>
+                                  <th>Product Type Name</th>
+                                  <th>Product Type Description</th>
+                                  <th>View/Edit</th>
+                                  <th>Delete</th>
+                              </tr>
+                              {% for product in products %}
+                                  <tr>
+                                    <td>
+                                      {% if product[2] is not none %}
+                                      <img class="bd-placeholder-img card-img-top"  width="50" height="45"
+                                      src="data:image/jpeg;base64,{{ product[2] }}" alt="Image">
+                                      {% endif %}
+                                  </td>
+                                      <td>{{ product[1] if product[1] is not none }}</td>
+                                      <td>{{ product[3] if product[3] is not none }}</td>
+                                      <td><a href="{{ url_for('local_manager.edit_product_type', product_type_id=product[0]) }}" class="btn btn-sm btn-primary">View/Edit</a></td>
+                                      <td><a href="#" onclick="confirmDelete('{{ url_for('local_manager.delete_product_type', product_type_id=product[0]) }}')"  class="btn btn-sm btn-danger">Delete</a></td>
+                                  </tr>
+                              {% endfor %}
+
+                          </table>
+                        </div>
+                      </div>
+                  </div>
+              
+                            <!-- Pagination -->
+                            <nav aria-label="Product navigation" style="margin-top: 20px;">
+                              <ul class="pagination justify-content-center">
+                                  {% if page > 1 %}
+                                      <li class="page-item">
+                                          <a class="page-link" href="{{ url_for('local_manager.search_product_type', page=page-1, product_name=product_name, product_category=product_category) }}">Previous</a>
+                                      </li>
+                                  {% endif %}
+                                  {% for p in range(1, total_pages + 1) %}
+                                      <li class="page-item {% if p == page %}active{% endif %}">
+                                          <a class="page-link" href="{{ url_for('local_manager.search_product_type', page=p, product_name=product_name, product_category=product_category) }}">{{ p }}</a>
+                                      </li>
+                                  {% endfor %}
+                                  {% if page < total_pages %}
+                                      <li class="page-item">
+                                          <a class="page-link" href="{{ url_for('local_manager.search_product_type', page=page+1, product_name=product_name, product_category=product_category) }}">Next</a>
+                                      </li>
+                                  {% endif %}
+                              </ul>
+                          </nav>
+                          
+        </div>
+    </div>
+</div>
+{% endblock %}

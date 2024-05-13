@@ -16,11 +16,3 @@ def getCursor():
     return dbconn
 
 
-# depot names
-def query_depot_names():
-    cursor = getCursor()
-    cursor.execute("SELECT location_name FROM depot")
-    depot_names = [row[0] for row in cursor.fetchall()]
-
-    cursor.close()
-    return depot_names

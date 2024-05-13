@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Edit Product Type</h1>
+            <hr>
+            
+            <div class="row">
+                <!-- Column for the product type Picture -->
+                <div class="col-md-3">
+                    <div class="text-left mb-3">
+                        <label>Current Image</label>
+                        <div>
+                            {% if product_image %}
+                            <img src="data:image/jpeg;base64,{{ product_image }}" alt="Product Picture"
+                                class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                            {% else %}
+                            <div class="img-thumbnail"
+                                style="width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; background-color: #f0f0f0; border: 1px dashed #ccc;">
+                                <span style="color: #aaa;">No product type image available</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            <form method="POST" action="{{ url_for('local_manager.edit_product_type', product_type_id=product_type_id) }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.product_name.label }}<span style="color:red;">*</span>
+                    {{ form.product_name(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_unit.label }}<span style="color:red;">*</span>
+                    {{ form.product_unit(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_description.label }}
+                    {{ form.product_description(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_category.label }}<span style="color:red;">*</span>
+                    {{ form.product_category(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_image.label }}
+                    {{ form.product_image(class="form-control") }}
+                </div>
+                <hr>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    <a href="javascript:history.back()" class="btn btn-sm btn-primary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,111 +1,71 @@
-.main-top {
+.navbar {
+    padding-left: 20px; 
+    padding-right: 20px; 
+    margin-bottom: 5px;
+    position: sticky;
+    top: 0;
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.87); 
-    color: white; 
+    z-index: 1000;
 }
-.phone-box {
+
+.navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px; 
-    text-align: right;
 }
 
-.phone-box p {
-    margin: 0; 
-}
-
-.phone-box ul {
-    list-style: none; 
-    padding: 0; 
-    margin: 0; 
-}
-
-.phone-box ul li {
-    display: inline-block; 
-    margin-right: 10px; 
-}
-.phone-box.links {
-    display: flex;
-    justify-content: flex-end; /* 将链接靠右对齐 */
+.navbar ul {
+    list-style: none;
     padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
 }
 
+.navbar li {
+    padding: 10px 15px;
+}
 
-.banner {
-    position: relative;
-    width: 90%;
-    margin: 0 auto;
-    overflow: hidden;
+.nav-link {
+    color: rgba(255, 255, 255, 0.75);
+    transition: color 0.3s, border-bottom 0.3s;
 }
-.banner img {
-    width: 100%;
-    height: auto;
-}
-.banner-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+
+.nav-link:hover {
     color: white;
 }
+
+.home-container {
+    background-image: url('/static/images/strawberry.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 3vh 10%;
+    flex-grow: 1;
+}
+
 .banner-text h1 {
-    font-size: 4em; /* initial size*/
-    margin-bottom: 20px;
+    font-size: 3em; 
+    text-align: center; 
+    color: white; 
+    font-weight: bold;
+    margin-top: 80px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
-.banner-text p {
-    margin-bottom: 0;
-}
-@media (max-width: 480px) {
-    .banner-text h1 {
-        font-size: 1em; /* small screen */
-    }
-}
-@media  (min-width: 481px) and (max-width: 768px) {
-    .banner-text h1 {
-        font-size: 2em; /* medium screen */
-    }
-}
-@media (min-width: 769px) and (max-width: 1024px) {
-    .banner-text h1 {
-        font-size: 3em; /* large screen */
-    }
-}
-
-@media (min-width: 1025px) {
-    .banner-text h1 {
-        font-size: 5em; /* x large */
-    }
-}
-
-.banner-text .btn {
-    background-color: #49372bce;
-    color: white;
-    padding: 10px 20px; 
-    text-decoration: none; 
-    border: none; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    transition: background-color 0.3s;
-}
-
-.banner-text .btn:hover {
-    background-color: #b0eb51da;
-}
-
-
-
 .categories-shop {
-    padding-top: 100px;
+    padding-bottom: 10px;
 }
 
 .categories-shop h2 {
     text-align: center;
+    color: white;
     font-weight: bold;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.89);
 }
 
 .btn.hvr-hover {
-    background-color: #eb9257;
+    background-color: #198040c7;
     color: white;
     padding: 10px 20px;
     display: block;
@@ -114,17 +74,65 @@
     font-weight: bold; 
     font-size: 1.2em; 
 }
-
-.footer {
-    background-color: rgba(0, 0, 0, 0.87); 
-    color: white; 
-    height: 50px; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    margin-top: auto; 
-    padding-top: 20px;
-    margin-top: 80px;
+.btn.hvr-hover:hover {
+    background-color: #37ec7c;
 }
 
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
+.footer {
+    height: 5vh;
+    background: rgba(0, 0, 0, 0.87);
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.content {
+    flex-shrink: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+}
+
+.shop-cat-box img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.shop-cat-box a.btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 1px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white; 
+    border: none;
+    border-radius: 0;
+}
+
+.authentication {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: center;
+}
+form {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.login-btn {
+    width: 100%;
+}

@@ -2,68 +2,72 @@
 {% block title %}Shopping Cart{% endblock %}
 
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
+<script>
+    function confirmDelete(deleteUrl) {
+        if (confirm("Are you sure you want to remove every item in the shopping cart?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-12">
+            <h1>Shopping Cart</h1>
+            <hr>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr class="table-primary">
+                        <th>Item</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Unit</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if session['shoppingcart'] %}
+                    {% for product in cart_items %}
+                    <tr>
+                        <td>{{ loop.index }}</td> 
+                        <td>
+                        {% if product.image %}
+                        <img src="data:image/jpeg;base64,{{ product.image }}" alt="{{ product.name }}" width="50" height="45"> <!-- Product Image -->
+                        {% endif %}
+                        </td>
+                        <td>{{ product.name }}</td> 
+                        <td>{{ product.unit }}</td> 
+                        <form action="{{ url_for('customer.updatecart', product_id=product.product_id) }}" method="post" >
+                        <td>${{ product.price }}</td> 
+                        <td><input type="number" name="quantity"min="1" value="{{product.quantity }}" style="width: 3em; margin-left: 5px; margin-right: 5px;"></td> 
+                        {% set subtotal = product.quantity|int * product.price|float %}
+                        <td>${{ "%0.2f"|format(subtotal|float)}}</td>
+                        <td><button type="submit" class="btn btn-sm btn-primary">Update</button></td>
+                        </form>
+                        <td><a href="{{url_for('customer.deleteitem', id=product.product_id)}}" class="btn btn-sm btn-danger">Remove</a>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">Your cart is empty</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+                    <table class="table table-sm">
+                    <tr>
+                        <td><a href="javascript:history.back()" class="btn btn-sm btn-primary" role="button">Continue Shopping</a></td>
+                        <td><h5>Grand Total: ${{grandtotal}} (inclusive of ${{tax}} GST)</h5></td>
+                        <td><a href="#" class="btn btn-sm btn-primary float-right">Checkout</a></td>
+                        <td><a href="#" onclick="confirmDelete('{{url_for('customer.clearcart')}}')" class="btn btn-sm btn-danger float-right">Clear cart</a></td>
+                    </tr>
+                </table>
+            </table>
 
-<head>
-    <section class="text-center container">
-        <div class="row py-lg-2">
-            <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Shopping Cart</h1>
-            </div>
         </div>
-    </section>
-</head>
-
-<div class="container">
-    <table class="table table-striped table-hover">
-        <thead>
-            <tr class="table-primary">
-                <th>Item</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-                <th>Update</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for key, product in session['shoppingcart'].items() %}
-            <tr>
-                <td>{{ loop.index }}</td> 
-                <td>
-                {% if product.image %}
-                <img src="data:image/jpeg;base64,{{ product.image }}" alt="{{ product.name }}" width="50" height="45"> <!-- Product Image -->
-                {% endif %}
-                </td>
-                <td>{{ product.name }}</td> 
-                <form action="" method="post">
-                <td>${{ product.price }}</td> 
-                <td><input type="number" name="quantity" min="1" value="{{product.quantity }}"></td> 
-                {% set subtotal = product.quantity|int * product.price|float %}
-                <td>${{ "%0.2f"|format(subtotal|float)}}</td>
-                <td><button type="submit" class=""btn btn-sm btn-info>Update</button></td>
-                </form>
-                <td><a href="{{url_for('customer.deleteitem', id=key)}}" class="btn btn-sm btn-danger">Remove</a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="6">Your cart is empty</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td><a href="/">Continue Shopping</a></td>
-                <td colspan="3">Tax: ${{tax}}</td>
-                <td colspan="4"><h4>Grand Total: ${{grandtotal}}</h4></td>
-                <td><a href="{{url_for('customer.clearcart')}}" class="btn btn-sm btn-danger float-right">Clear cart</a></td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
 </div>
-</form>
 
 {% endblock content %}

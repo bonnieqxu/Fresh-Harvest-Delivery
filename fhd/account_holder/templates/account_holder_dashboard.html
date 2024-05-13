@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Account Holder Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1>Welcome! {{ name }}</h1>
+        <p>Select an option below to get started.</p>
+    </div>
+
+    <div class="container mt-3">
+        <!-- Top Row: Three blocks in a card deck -->
+        <div class="row">
+            <!-- Personal Profile Management Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Profile</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-primary mb-2">Update
+                                Account</a>
+                            <!-- <a href="password-update-url" class="btn btn-secondary mb-2">Change Password</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Credit Limits Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Credit Limit</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">View My Credit Limit</a>
+                            <a href="#" class="btn btn-info mb-2">Increase My Credit Limit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View/Pay Invoice Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">View/Pay Invoice</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">View Invoices</a>
+                            <a href="#" class="btn btn-info mb-2">Pay My Bills</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

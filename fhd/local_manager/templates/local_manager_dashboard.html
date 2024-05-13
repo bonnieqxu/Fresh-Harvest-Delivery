@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}Local Manager Dashboard{% endblock %} {%
+block content %}
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1>Welcome! {{ name }}</h1>
+        <p>Select an option below to get started.</p>
+    </div>
+
+    <div class="container mt-3">
+        <!-- Top Row: Three blocks in a card deck -->
+        <div class="row">
+            <!-- Personal Profile Management Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Profile</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-primary mb-2">Update
+                                Account</a>
+                            <!-- <a href="password-update-url" class="btn btn-secondary mb-2">Change Password</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Manage Inventory Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Product Type</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('local_manager.search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Orders Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Orders</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">View/Edit Order Status</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Messages Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Messages</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">Inbox /View Messages</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Pre-made Boxes Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Pre-made Boxes</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">Add a New Items</a>
+                            <a href="#" class="btn btn-info mb-2">View/Edit ltems</a>
+                            <a href="#" class="btn btn-info mb-2">Delete Items</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Promotions Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Promotions</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">Update Promotions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Manage News Block-->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage News</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">Add a New News</a>
+                            <a href="#" class="btn btn-info mb-2">View/Edit News</a>
+                            <a href="#" class="btn btn-info mb-2">Delete News</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Account Applications Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Account Applications</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">View/Approve Account Applications</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fourth Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Staff Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Staff</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">Add a New Staff</a>
+                            <a href="#" class="btn btn-info mb-2">View/Edit Staff</a>
+                            <a href="#" class="btn btn-info mb-2">Delete Staff</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Reports and Analysis Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Reports and Analysis</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">Revenue Report</a>
+                            <a href="#" class="btn btn-info mb-2">Sales Report</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Credit Limit Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Credit Limit</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">View/Set Account Holder Credit Limit</a>
+                            <a href="#" class="btn btn-info mb-2">Update Account Holder Total Credit Limit</a>
+                            <a href="#" class="btn btn-info mb-2">Approve/Reject Credit Limit Change Request</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fifth Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Monthly Account Outstanding Balances Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Monthly Account Outstanding Balances</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="#" class="btn btn-info mb-2">View Monthly Account Outstanding Balances</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {% endblock %}

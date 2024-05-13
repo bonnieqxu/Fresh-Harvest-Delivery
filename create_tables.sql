@@ -9,14 +9,14 @@ CREATE TABLE user_role (
 
 CREATE TABLE depot (
     depot_id INT AUTO_INCREMENT PRIMARY KEY,
-    location_name VARCHAR(50) NOT NULL,
+    depot_name VARCHAR(50) UNIQUE NOT NULL,
     address VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(40) NOT NULL,
+    password VARCHAR(80) NOT NULL,
     role_id INT NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
 	depot_id INT NOT NULL,
@@ -81,7 +81,7 @@ CREATE TABLE product_weight (
 -- veges, fruits
 CREATE TABLE product_category (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
-    category_name VARCHAR(50) NOT NULL,
+    category_name VARCHAR(50) UNIQUE NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
@@ -108,7 +108,7 @@ CREATE TABLE product (
     stock_quantity INT NOT NULL,
     depot_id INT NOT NULL,
     product_type_id INT NOT NULL,
-    promotion_type_id INT NOT NULL,
+    promotion_type_id INT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (depot_id) REFERENCES depot(depot_id)
 	ON UPDATE CASCADE
@@ -137,11 +137,13 @@ CREATE TABLE box_size (
 
 CREATE TABLE box (
     box_id INT AUTO_INCREMENT PRIMARY KEY,
-    box_name VARCHAR(80) NOT NULL,
-    box_description VARCHAR(255),
+    product_id INT NOT NULL,
     box_size_id INT NOT NULL,
     box_subscription_id INT,  -- Optional link to a subscription plan, NULL if no subscription is associated
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    FOREIGN KEY (product_id) REFERENCES product(product_id)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
     FOREIGN KEY (box_size_id) REFERENCES box_size(box_size_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,

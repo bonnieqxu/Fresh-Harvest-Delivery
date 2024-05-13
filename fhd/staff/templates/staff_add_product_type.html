@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Add Product Type</h1>
+            <hr>
+            <form method="POST" action="{{ url_for('staff.staff_add_product_type') }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.product_name.label }}<span style="color:red;">*</span>
+                    {{ form.product_name(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_unit.label }}<span style="color:red;">*</span>
+                    {{ form.product_unit(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_description.label }}
+                    {{ form.product_description(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_category.label }}<span style="color:red;">*</span>
+                    {{ form.product_category(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_image.label }}
+                    {{ form.product_image(class="form-control") }}
+                </div>
+                <hr>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    <a href="javascript:history.back()" class="btn btn-sm btn-primary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
