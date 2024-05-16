@@ -65,7 +65,7 @@ def get_gst_rate():
 
 def get_product_weight():
     cursor = getCursor()
-    cursor.execute("""SELECT product_weight_id, weight, unit FROM product_weight WHERE is_active = 1""")
+    cursor.execute("""SELECT product_weight_id, COALESCE(weight, '') AS weight, unit FROM product_weight WHERE is_active = 1  ORDER BY unit ASC""")
     product_weight = cursor.fetchall()
     cursor.close()
     return product_weight
@@ -348,7 +348,13 @@ def User (email, password, depot_id,first_name, last_name, address, phone, dob):
             INSERT INTO user_profile (user_id, first_name, last_name, address, phone_number, date_of_birth)
             VALUES (%s, %s, %s, %s, %s, %s)
         """, (user_id, first_name, last_name, address, phone, dob))
+    
     cursor.close()
+    
+    customer_name = first_name + " " + last_name
+    #sender = 11 (national manager)
+    send_message(11, user_id, "Welcome to Fresh Harvest Delivery {},  We're thrilled to have you join our community of fresh produce enthusiasts. Get ready to experience the convenience of farm-fresh goodness delivered right to your doorstep. Whether you're craving a vibrant salad, succulent fruits, or wholesome veggies, we've got you covered.".format(customer_name), 1)
+    
     return User
     
 def get_user_full_name(user_id):
@@ -360,3 +366,121 @@ def get_user_full_name(user_id):
     conn.close()
     return name if name else None
 
+
+# Insert payment information into the database
+def insert_payment(order_hdr_id, grandtotal, payment_method_id, payment_date):
+    cursor = getCursor()            
+    cursor.execute("INSERT INTO payment (order_hdr_id, amount, payment_method_id, payment_date) VALUES (%s, %s, %s, %s)",
+                       (order_hdr_id, grandtotal, payment_method_id, payment_date))
+    
+
+# update status_id field to 1 （confirmed） for order_hdr table
+def status_confirmed():
+    cursor = getCursor()  
+    cursor.execute("UPDATE order_hdr SET status_id = 1 ORDER BY order_hdr_id DESC LIMIT 1")
+
+   
+
+def create_order(grandtotal, cart_items):
+    conn = getCursor()
+    user_id = session['user_id']
+    conn.execute(
+        """INSERT INTO order_hdr (user_id, order_date, total_price, status_id, shipping_option_id) VALUES (%s, CURDATE(), %s, %s, %s)""",
+        (user_id, grandtotal, 1, 1))
+    order_hdr_id = conn.lastrowid
+
+    for product_id, details in cart_items.items():
+        item_info = details['item_info']
+        quantity = item_info['quantity']
+        line_total = details['subtotal']
+        conn.execute(
+        """INSERT INTO order_detail (order_hdr_id, product_id, quantity, line_total_price) VALUES (%s, %s, %s, %s)""", 
+        (order_hdr_id, product_id, quantity, line_total))
+    conn.close()
+    return order_hdr_id
+
+
+
+def national_manager_add_product_weight(weight, unit):
+    cursor = getCursor()
+    cursor.execute("""INSERT INTO product_weight (weight, unit) VALUES (%s, %s)""", (weight, unit))
+    cursor.close()
+
+    
+
+def national_manager_delete_product_weight_by_id(product_weight_id):
+    cursor = getCursor()
+    cursor.execute("""delete from product_weight where product_weight_id=%s""", 
+                       (product_weight_id,))
+    cursor.close()
+
+def get_all_messages_by_user_id():
+
+    user_id = session['user_id']
+    user_role_id = session['user_role_id']
+
+    cursor = getCursor()
+
+    # Fetch all messages based on user_role
+    #if the user is a customer, return all messages 
+    if user_role_id in (1, 2):
+        cursor.execute("""select * from message
+                            WHERE receiver_id =  %s order by sent_time asc""", (user_id,))
+    #if user is staff, return all the messages that is for the staff group ()
+    elif user_role_id == 3:
+        cursor.execute("""select * from message
+                            WHERE receiver_id in ('3') and message_category_id IN ('2') 
+                            and message_status_id ='1' and depot_id = %s
+                            order by sent_time asc;""", (session['user_depot'],))
+    
+    elif user_role_id == 4:
+        cursor.execute("""select * from message
+                            WHERE receiver_id in ('3','4') and message_category_id IN ('2') 
+                            and message_status_id='1' and depot_id = %s
+                            order by sent_time asc;""", (session['user_depot'],))
+
+    elif user_role_id == 5:
+        cursor.execute("""select * from message
+                            WHERE receiver_id in ('3','4') and message_category_id IN ('2') 
+                            and message_status_id='1' order by sent_time asc;""")
+        
+    messages = cursor.fetchall()
+    cursor.close()
+
+    modified_messages = []
+
+    # Loop through each message in the messages list
+    for message in messages:
+        # Extract sender's ID from the message tuple
+        sender_id = message[1]
+        # Get sender's full name
+        sender_full_name = get_user_full_name(sender_id)
+        # Convert the message tuple to a list
+        message_list = list(message)
+        # Append sender's full name to the list
+        message_list.append(sender_full_name)
+        # Convert the list back to a tuple
+        modified_message = tuple(message_list)
+        # Append the modified message tuple to the new list
+        modified_messages.append(modified_message)
+
+    return modified_messages
+
+def send_message(sender_id, receiver_id, content, message_category_id):
+    
+    cursor = getCursor()
+
+    cursor.execute(
+        """INSERT INTO message (sender_user_id, receiver_id, content, sent_time, message_status_id, message_category_id,depot_id) VALUES (%s, %s, %s, Now(), 1, %s, %s)""",
+        (sender_id, receiver_id, content, message_category_id, session['user_depot']))
+    
+    cursor.close()
+
+def delete_message_by_id(message_id):
+    cursor = getCursor()
+
+    cursor.execute("""delete from message where message_id =%s""", 
+                       (message_id,))
+    cursor.close()
+
+    

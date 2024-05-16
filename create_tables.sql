@@ -73,8 +73,8 @@ CREATE TABLE promotion_type (
 
 CREATE TABLE product_weight (
     product_weight_id INT AUTO_INCREMENT PRIMARY KEY,
-    weight DECIMAL(10, 2) NOT NULL,  -- The weight amount, e.g., 0.5 for 500 grams, 1 for 1 kilogram
-    unit VARCHAR(10) NOT NULL,     -- Unit of weight, e.g., 'kg', 'lb'
+    weight DECIMAL(10, 2) DEFAULT NULL,  -- The weight amount, e.g., 0.5 for 500 grams, 1 for 1 kilogram
+    unit VARCHAR(10) NOT NULL,     -- Unit of weight, e.g., 'kg', 
     is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
@@ -108,7 +108,7 @@ CREATE TABLE product (
     stock_quantity INT NOT NULL,
     depot_id INT NOT NULL,
     product_type_id INT NOT NULL,
-    promotion_type_id INT,
+    promotion_type_id INT ,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (depot_id) REFERENCES depot(depot_id)
 	ON UPDATE CASCADE
@@ -261,6 +261,7 @@ CREATE TABLE gst_rate (
 
 CREATE TABLE invoice (
     invoice_id INT AUTO_INCREMENT PRIMARY KEY,
+    invoice_num VARCHAR(50) NOT NULL,
     order_hdr_id INT NOT NULL,
     payment_id INT NOT NULL,
     date_issued DATE NOT NULL,
@@ -346,11 +347,13 @@ CREATE TABLE message_category (
 
 CREATE TABLE message (
     message_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
+    sender_user_id INT NOT NULL,
+    receiver_id INT NOT NULL,
     content TEXT NOT NULL,
     sent_time DATETIME NOT NULL,
     message_status_id INT NOT NULL,
     message_category_id INT NOT NULL,
+    depot_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,

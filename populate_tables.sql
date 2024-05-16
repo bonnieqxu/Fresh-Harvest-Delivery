@@ -123,7 +123,16 @@ INSERT INTO product_weight (weight, unit) VALUES
 (2, 'kg'),     -- Useful for larger quantity retail packages.
 (5, 'kg'),     -- Small box
 (10, 'kg'),    -- Medium box
-(15, 'kg');    -- Large box
+(15, 'kg'),    -- Large box
+(NULL, 'Head'),
+(NULL, 'Each'),
+(NULL, 'Bag'),
+(NULL, 'Dozen'),
+(NULL, 'Half Dozen'),
+(NULL, 'Punnet'),
+(NULL, 'Tray'),
+(500, 'Grams');
+
     
     
 INSERT INTO product_category (category_name) VALUES
@@ -707,7 +716,15 @@ INSERT INTO gift_card_option (price, is_active) VALUES
 (150.00, TRUE),  -- $150 gift card
 (200.00, TRUE);  -- $200 gift card    
     
-    
+INSERT INTO message_status (message_status_id, status_name, description) VALUES
+(1, 'New', 'Message is received'),
+(2, 'Read', 'Message is read'),
+(3, 'Sent', 'Message is sent'),
+(4, 'Processed', 'Message is processed');
+
+INSERT INTO message_category (message_category_id, message_category_name, description) VALUES
+(1, 'Notification', 'Includes any sort of messages from Welcome message to order status notification'),
+(2, 'Enquiry', 'Enquiry to Staff');
     
     
     

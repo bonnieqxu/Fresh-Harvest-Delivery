@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+
+<style>
+body {
+    background-image: url('/static/images/veges.jpg'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+}
+
+    /* Modal container */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 30px;
+    border: 1px solid #888;
+    width: 40%;
+  }
+.buttons {
+        text-align: center; 
+}
+.buttons button {
+        width: 120px; 
+        margin: 0 10px; 
+}
+
+    .buttons button:nth-child(1) {
+    background-color: rgb(16, 87, 16); 
+    color: white; 
+}
+
+.buttons button:nth-child(2) {
+    background-color: rgb(31, 31, 230); 
+    color: white; 
+}
+
+
+</style>
+
+
+<div id="paymentConfirmationModal" class="modal">
+    <div class="modal-content">
+        <h3><strong> Thank You For Your Payment! </strong></h3>
+        <hr>
+        <h5> Your order is confirmed. You will receive a notification once your order is dispatched. </h5>
+        <ul>
+            <li><p> Your receipt of purchase is now available. </p></li>
+            <li><p> Please press OK to continue shopping. </p></li>
+        </ul>
+        <div class="buttons">
+            <button onclick="viewReceipt()">View Receipt</button>
+            <button onclick="redirectToHome()">OK</button>
+        </div>
+    </div>
+  </div>
+  
+  <script>
+
+    // Get the modal
+    var modal = document.getElementById("paymentConfirmationModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    modal.style.display = "block";
+
+    function redirectToHome() {
+        window.location.href = "{{ url_for('customer.view_depot_products') }}";
+    }
+
+    function viewReceipt() {
+        window.open("#", "_blank");
+    }
+
+  </script>
+
+{% endblock content %}

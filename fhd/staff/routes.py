@@ -3,7 +3,7 @@ from fhd.utilities import flash_form_errors, check_auth
 from fhd.local_manager.routes import get_user_full_name
 from fhd.utilities import flash_form_errors, check_auth, add_new_product_type, get_product_type_by_name, get_user_full_name
 from fhd.utilities import get_product_category, get_all_product_type, get_product_type_by_id, update_product_type
-from fhd.utilities import delete_product_type_by_id
+from fhd.utilities import delete_product_type_by_id, get_all_messages_by_user_id, delete_message_by_id
 from fhd.staff.forms import AddProductTypeForm, SearchProductTypeForm, EditProductTypeForm
 
 staff = Blueprint("staff", __name__, template_folder="templates")
@@ -171,4 +171,30 @@ def staff_delete_product_type(product_type_id):
     # Return to the product type page after the successful update
     flash("Product Type deleted successfully.", "success")
     return staff_search_product_type()
+
+@staff.route('/getMessages')
+def getMessages():
+    # Check authentication and authorisation
+    auth_response = check_is_staff()
+    if auth_response:
+        return auth_response
+
+    messages = get_all_messages_by_user_id()
+    
+    return render_template('staff_messages_list.html', messages=messages)
+
+@staff.route('/delete_message/<int:message_id>')
+def delete_message(message_id):
+        
+    # Check authentication and authorisation
+    auth_response = check_is_staff()
+    if auth_response:
+        return auth_response
+
+    delete_message_by_id(message_id)
+
+    messages = get_all_messages_by_user_id()
+    flash("Your message has been deleted.", "success")
+    return render_template('staff_messages_list.html', messages=messages)
+
 # endregion

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from fhd.utilities import flash_form_errors, check_auth, add_new_product_type, get_product_type_by_name, get_user_full_name
 from fhd.utilities import get_product_category, get_all_product_type, get_product_type_by_id, update_product_type
-from fhd.utilities import delete_product_type_by_id
+from fhd.utilities import delete_product_type_by_id, delete_message_by_id, get_all_messages_by_user_id
 from fhd.local_manager.forms import AddProductTypeForm, SearchProductTypeForm, EditProductTypeForm
 
 local_manager = Blueprint("local_manager", __name__, template_folder="templates")
@@ -17,39 +17,6 @@ def get_category_id_by_name(category_name, categories):
             return category_id
     return None  # Return None or appropriate value if not found
 
-
-def manage_product_type():
-    form = SearchProductTypeForm()
-    
-    # Initialize variables
-    product_name = None
-    product_category = None
-    page_num = request.args.get('page', 1, type=int)
-
-    if request.method == 'POST' and form.validate_on_submit():
-        product_name = form.product_name.data
-        product_category = form.product_category.data
-
-    if request.method == 'GET':
-        product_name = request.args.get('product_name')
-        if product_name == '':
-            product_name = None  # Set to None if empty string
-
-        product_category = request.args.get('product_category')
-        if product_category == '':
-            product_category = None  # Set to None if empty string
-
-    item_num_per_page = 20
-
-    # Get product categories
-    categories = get_product_category()
-
-    # Get all product infos from db
-    products, total = get_all_product_type(page_num, item_num_per_page, product_category, product_name)
-
-    # Calculate total pages
-    total_pages = (total + item_num_per_page - 1) // item_num_per_page
-    return render_template("product_type_list.html", form=form, products=products, page=page_num, total_pages=total_pages, categories=categories, product_name=product_name, product_category=product_category)
 
 
 # endregion
@@ -95,7 +62,38 @@ def search_product_type():
     if auth_response:
         return auth_response
 
-    return manage_product_type()
+    form = SearchProductTypeForm()
+    
+    # Initialize variables
+    product_name = None
+    product_category = None
+    page_num = request.args.get('page', 1, type=int)
+
+    if request.method == 'POST' and form.validate_on_submit():
+        product_name = form.product_name.data
+        product_category = form.product_category.data
+
+    if request.method == 'GET':
+        product_name = request.args.get('product_name')
+        if product_name == '':
+            product_name = None  # Set to None if empty string
+
+        product_category = request.args.get('product_category')
+        if product_category == '':
+            product_category = None  # Set to None if empty string
+
+    item_num_per_page = 20
+
+    # Get product categories
+    categories = get_product_category()
+
+    # Get all product infos from db
+    products, total = get_all_product_type(page_num, item_num_per_page, product_category, product_name)
+
+    # Calculate total pages
+    total_pages = (total + item_num_per_page - 1) // item_num_per_page
+    return render_template("product_type_list.html", form=form, products=products, page=page_num, total_pages=total_pages, categories=categories, product_name=product_name, product_category=product_category)
+
 
 
 @local_manager.route("/edit_product_type/<product_type_id>", methods=["GET", "POST"])
@@ -175,3 +173,28 @@ def dashboard():
     user_id = session.get('user_id')
     name = get_user_full_name(user_id)
     return render_template("local_manager_dashboard.html", name=name)
+
+@local_manager.route('/getMessages')
+def getMessages():
+    # Check authentication and authorisation
+    auth_response = check_is_local_manager()
+    if auth_response:
+        return auth_response
+
+    messages = get_all_messages_by_user_id()
+    
+    return render_template('account_holder_messages_list.html', messages=messages)
+
+@local_manager.route('/delete_message/<int:message_id>')
+def delete_message(message_id):
+        
+    # Check authentication and authorisation
+    auth_response = check_is_local_manager()
+    if auth_response:
+        return auth_response
+
+    delete_message_by_id(message_id)
+
+    messages = get_all_messages_by_user_id()
+    flash("Your message has been deleted.", "success")
+    return render_template('account_holder_messages_list.html', messages=messages)

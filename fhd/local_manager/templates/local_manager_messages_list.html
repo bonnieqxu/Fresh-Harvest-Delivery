@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+<script>
+    function confirmDelete(deleteUrl) {
+        if (confirm("Are you sure you want to delete this message?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Message</h1>
+            <hr>
+                  <br>
+                      <div class="row">
+                        <div class="col-12">
+                            <table class="table table-striped table-hover">
+                                <tr class="table-primary">
+                                          <th>Sender</th>
+                                          <th>Message Content</th>
+                                          <th>Sent Date</th>
+                                          <th>Delete</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody> <!-- Add tbody tag for table body -->
+                                      {% for message in messages %}
+                                          <tr>
+                                              <td style="width: 120px;">{{ message[-1] if message[-1] is not none }}</td>
+                                              <td>{{ message[3] if message[3] is not none }}</td>
+                                              <td style="width: 120px;">{{ message[4].strftime('%d-%m-%Y') if message[4] is not none }}</td>
+                                              <td><a href="#" onclick="confirmDelete('{{ url_for('local_manager.delete_message', message_id=message[0]) }}')" class="btn btn-sm btn-danger">Delete</a></td>
+                                          </tr>
+                                      {% endfor %}
+                                  </tbody>
+                              </table>
+                        </div>
+                      </div>
+                  </div>
+                          
+        </div>
+    </div>
+</div>
+
+{% endblock %}
