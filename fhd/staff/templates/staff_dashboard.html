@@ -30,7 +30,7 @@ block content %}
                     <div class="card-header">Manage Product</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View/Edit Product</a>
+                            <a href="{{ url_for('staff.staff_product_list', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View/Edit Product</a>
                             <a href="#" class="btn btn-info mb-2">Discontinue Product</a>
                         </div>
                     </div>
@@ -58,7 +58,7 @@ block content %}
                     <div class="card-header">Manage Orders</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View/Edit Order Status</a>
+                            <a href="{{ url_for('staff.update_order_statuses') }}" class="btn btn-info mb-2">View/Edit Order Status</a>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@ block content %}
                     <div class="card-header">Manage Messages</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Inbox /View Messages</a>
+                            <a href="{{ url_for('staff.getMessages') }}" class="btn btn-info mb-2">Inbox /View Messages</a>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from fhd.utilities import flash_form_errors, get_all_products, get_full_product_info_by_id, get_product_category, get_box_size
-from fhd.utilities import query_depot_names
+from fhd.utilities import query_depot_names, get_box_contents_by_product_id
 
 
 
@@ -62,6 +62,12 @@ def view_products(depot_name, category_name='All', size=None):
 def view_product(product_id):
     # Get the specific product from db
     product = get_full_product_info_by_id(product_id)
-    return render_template("view_a_product.html", product=product, product_id=product_id)
-
+    
+    # Check if the product is a Premade Box
+    box_contents = None
+    if product[7] == 'Premade Box':
+        box_contents = get_box_contents_by_product_id(product_id)
+    
+    return render_template("view_a_product.html", product=product, product_id=product_id, box_contents=box_contents)
 # endregion
+

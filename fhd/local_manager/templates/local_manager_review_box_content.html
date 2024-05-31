@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block title %}Local Manager Review the Box{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ url_for('local_manager.add_box_content') }}"
+            style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+         << Add More Items</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h1>Review Box Content</h1>
+        </div>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% if box_items %}
+            <form id="orderForm" method="post" action="{{ url_for('local_manager.confirm_box') }}">
+                <table class="table table-striped table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Product Id</th>
+                            <th style="width: 15%;">Image</th>
+                            <th style="width: 20%;">Name</th>
+                            <th style="width: 20%;">Unit</th>
+                            <th style="width: 20%;">In-box Quantity</th>
+                            <th style="width: 10%;">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for box_item in box_items %}
+                        <tr>
+                            <td>{{ box_item[0] }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                    {% if box_item[2] %}
+                                        <!-- Product Image -->
+                                        <img src="data:image/jpeg;base64,{{ box_item[2] }}" alt="{{ box_item[1] }}" width="50px" height="45px">
+                                    {% else %}
+                                    <!-- Placeholder when there's no image -->
+                                    <div style="width: 50px; height: 45px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: #ccc;">Image coming soon</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>{{ box_item[1] }}</td>
+                            <td>{{ box_item[3] }} {{ box_item[4] }}</td>
+                            
+                            <td>
+                                <input class="form-control text-center" type="number" id="quantity_{{ box_item[0] }}"
+                                    name="quantity_{{ box_item[0] }}" min="1" value="{{ box_item[5] }}"
+                                    data-unit-weight="{{ box_item[3] }}" onchange="updateTotalWeight()">
+                            </td>
+                            <td>
+                                <a href="#" onclick="confirmDelete(event, '{{ url_for('local_manager.delete_box_item', item_id=box_item[0]) }}')" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-minus-circle"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>Total Weight: <span id="total-weight">{{ total_weight }}</span> kg</h5>
+                    </div>
+                <div class="d-flex justify-content-end" style="gap: 10px;">
+                    <button type="submit" class="btn btn-primary">Confirm Box</button>
+                    <a href="#" class="btn btn-danger" onclick="confirmClear(event, '{{ url_for('local_manager.clear_box') }}')">Clear Items</a>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <div class="alert alert-info" role="alert">No items in the box!</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(event, url) {
+        event.preventDefault();
+        if (confirm("Are you sure you want to delete this item?")) {
+            window.location.href = url;
+        }
+    }
+
+    function confirmClear(event, url) {
+        event.preventDefault();
+        if (confirm("Clearing all the items will also delete this box. Are you sure you want to continue?")) {
+            window.location.href = url;
+        }
+    }
+
+    function updateTotalWeight() {
+        let totalWeight = 0;
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            const unitWeight = parseFloat(input.getAttribute('data-unit-weight'));
+            const quantity = parseInt(input.value);
+            totalWeight += unitWeight * quantity;
+        });
+        document.getElementById('total-weight').innerText = totalWeight.toFixed(2);
+    }
+
+    // Initialize total weight calculation on page load
+    document.addEventListener('DOMContentLoaded', (event) => {
+        updateTotalWeight();
+    });
+</script>
+{% endblock content %}

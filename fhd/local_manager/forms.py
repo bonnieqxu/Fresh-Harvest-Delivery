@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
-from wtforms.fields import FileField, SubmitField, StringField, SelectField, TextAreaField
-from wtforms.validators import DataRequired, Length, EqualTo, Email, InputRequired, NumberRange
-from fhd.utilities import get_product_category, get_product_weight
+from wtforms.fields import FileField, SubmitField, StringField, SelectField, TextAreaField, IntegerField, DecimalField
+from wtforms.validators import DataRequired, Length, NumberRange, ValidationError
+from fhd.utilities import get_product_category, get_product_weight, get_product_type_by_name, get_box_size_full, get_product_weight_kilo_only
 
 class AddProductTypeForm(FlaskForm):
 
@@ -38,3 +38,48 @@ class SearchProductTypeForm(FlaskForm):
 
     product_name = StringField(label='Product Type Name')
     product_category = SelectField(label='Product Type Category', choices=[(c[0], c[1]) for c in categories])
+
+
+class ViewProductForm(FlaskForm):
+
+    product_weight = get_product_weight()
+
+    product_name = StringField(label='Product Type Name')
+    product_price = StringField(label='Product Price')
+    product_quantity = StringField(label='Product Quantity')
+    product_unit = SelectField(label='Product Type Unit', choices=[(w[0], f"{w[1]} {w[2]}") for w in product_weight])
+
+class EditProductForm(FlaskForm):
+
+    product_weight = get_product_weight()
+
+    product_price = DecimalField(label='Product Price', validators=[NumberRange(min=0)])
+    product_quantity = IntegerField(label='Product Quantity', validators=[NumberRange(min=0)])
+    submit = SubmitField('Submit')
+
+
+class UpdateOrderStatusForm(FlaskForm):
+    status = SelectField(label='Status', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+class AddBoxForm(FlaskForm):
+    categories = get_product_category(False)
+    product_weight = get_product_weight_kilo_only()
+    box_sizes = get_box_size_full()
+
+    box_name = StringField(label='Name', validators=[DataRequired(),Length(min=3,max=50)])
+    box_unit = SelectField(label='Unit', choices=[(w[0], f"{w[1]} {w[2]}") for w in product_weight])
+    box_size = SelectField(label='Size', choices=[(w[0], f"{w[1]} - ${w[2]}") for w in box_sizes])
+    box_description = TextAreaField(label='Description', render_kw={"rows": 3})
+    box_stock = IntegerField('Stock', validators=[DataRequired("Stock is required!"), NumberRange(min=1, message="At least 1.")])
+    box_image = FileField("Box Image (Max 1 image)", validators=[FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')])
+
+    def validate_box_name(form, field):
+        if get_product_type_by_name(field.data):
+            raise ValidationError("Box name already exist!")
+
+
+class ReplyMessageForm(FlaskForm):
+
+    message_content = TextAreaField(label='Message Content', render_kw={"rows": 3})
+    submit = SubmitField('Submit')

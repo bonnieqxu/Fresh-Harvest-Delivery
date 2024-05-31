@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}
+Edit Product Weight
+{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Edit Product Weight</h1>
+            <hr>
+            <form method="POST" action="{{ url_for('national_manager.edit_product_weight', product_weight_id=product_weight_id) }}" autocomplete="off" class="mt-4">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.weight.label }} <small class="text-muted">(Optional: Enter weight or quantity if applicable, or leave blank)</small>
+                    {{ form.weight(class="form-control", placeholder="Enter weight (e.g., 1.25)") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.unit.label }}<span style="color:red;">*</span> <small class="text-muted">(Required: Enter the unit of measure, e.g., kg, lb, g, etc.)</small>
+                    {{ form.unit(class="form-control", placeholder="Enter unit (e.g., kg)") }}
+                </div>  
+
+                <hr>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ url_for('national_manager.view_product_weight') }}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

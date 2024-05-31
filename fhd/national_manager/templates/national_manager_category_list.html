@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+<script>
+    function confirmDelete(deleteUrl) {
+        if (confirm("Are you sure you want to delete this category?")) {
+            window.location.href = deleteUrl;
+        }
+    }
+</script>
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Product Category</h1>
+            <hr>
+            <div class="container">
+                <div class="ml-auto d-flex">
+                  <a href="{{ url_for('national_manager.add_category') }}" class="btn btn-primary" role="button">Add New Category</a>
+              </div>
+              
+                  <br>
+                      <div class="row">
+                        <div class="col-12">
+                          <table class="table table-striped table-hover">
+                              <tr class="table-primary">
+                                  <th>Category Name</th>
+                                  <th>Status</th>
+                                  <th>Edit</th>
+                                  <th>Delete</th>
+                              </tr>
+                              {% for category in categories %}
+                                  <tr>
+                                      <td>{{ category[1] if category[1] is not none }}</td>
+                                      <td> {% if category[2] == 1 %}
+                                                Active
+                                            {% else %}
+                                                Inactive
+                                            {% endif %}</td>
+                                      <td><a href="{{ url_for('national_manager.edit_category', category_id=category[0]) }}" class="btn btn-sm btn-primary">Edit</a></td>
+                                      <td><a href="#" onclick="confirmDelete('{{ url_for('national_manager.delete_category', category_id=category[0]) }}')"  class="btn btn-sm btn-danger">Delete</a></td>
+                                  </tr>
+                              {% endfor %}
+
+                          </table>
+                        </div>
+                      </div>
+                  </div>
+              
+        </div>
+    </div>
+</div>
+{% endblock %}

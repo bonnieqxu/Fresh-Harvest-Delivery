@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Local Manager Create Box{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Add New Box</h1>
+            <hr>
+            <form method="POST" action="{{ url_for('local_manager.create_box') }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.box_name.label }}<span style="color:red;">*</span>
+                    {{ form.box_name(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_unit.label }}<span style="color:red;">*</span>
+                    {{ form.box_unit(class="form-select") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_size.label }}<span style="color:red;">*</span>
+                    {{ form.box_size(class="form-select") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_description.label }}
+                    {{ form.box_description(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_stock.label }}<span style="color:red;">*</span>
+                    {{ form.box_stock(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_image.label }}
+                    {{ form.box_image(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-sm">Next: choose box items</button>
+                    <a href="javascript:history.back()" class="btn btn-sm btn-danger">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,92 +3,53 @@
 
 {% block content %}
 
-<style>
-body {
-    background-image: url('/static/images/veges.jpg'); 
-    background-size: cover; 
-    background-repeat: no-repeat; 
-}
-
-    /* Modal container */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-  
-  /* Modal content */
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
-    padding: 30px;
-    border: 1px solid #888;
-    width: 40%;
-  }
-.buttons {
-        text-align: center; 
-}
-.buttons button {
-        width: 120px; 
-        margin: 0 10px; 
-}
-
-    .buttons button:nth-child(1) {
-    background-color: rgb(16, 87, 16); 
-    color: white; 
-}
-
-.buttons button:nth-child(2) {
-    background-color: rgb(31, 31, 230); 
-    color: white; 
-}
-
-
-</style>
-
+<link rel="stylesheet" href="{{ url_for('static', filename='payment_modal.css') }}">
 
 <div id="paymentConfirmationModal" class="modal">
     <div class="modal-content">
-        <h3><strong> Thank You For Your Payment! </strong></h3>
+        <h3><strong> Thank You For Shopping with Us! </strong></h3>
         <hr>
+        {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+        <h5> Your order has been confirmed and the amount has been deducted from your credit. You will receive a notification once your order is dispatched. </h5>
+        {% else %}
         <h5> Your order is confirmed. You will receive a notification once your order is dispatched. </h5>
+        {% endif %}
         <ul>
             <li><p> Your receipt of purchase is now available. </p></li>
             <li><p> Please press OK to continue shopping. </p></li>
         </ul>
         <div class="buttons">
-            <button onclick="viewReceipt()">View Receipt</button>
-            <button onclick="redirectToHome()">OK</button>
+            <form id="receiptForm" action="
+            {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+            {{ url_for('account_holder.view_receipt', invoice_id=invoice_id) }}
+            {% else %}
+            {{ url_for('customer.view_receipt', invoice_id=invoice_id) }}
+            {% endif %}" method="GET">
+                <div>
+                    <button type="submit" id="viewReceiptButton" class="btn btn-sm btn-success">View Receipt</button>                   
+                    <button type="button" id="okButton" class="btn btn-sm btn-primary">OK</button> 
+                </div>
+            </form>    
+                      
         </div>
     </div>
-  </div>
+</div>
   
-  <script>
-
+<script>
     // Get the modal
     var modal = document.getElementById("paymentConfirmationModal");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
 
     // When the user clicks the button, open the modal
     modal.style.display = "block";
 
-    function redirectToHome() {
+    // Add event listener for the OK button
+    document.getElementById('okButton').addEventListener('click', function() {
+        if ("{{ session['user_role_id'] }}" == 2 || "{{ session['user_role_id'] }}" == '2') {
+            window.location.href = "{{ url_for('account_holder.view_depot_products') }}";
+        } else {
         window.location.href = "{{ url_for('customer.view_depot_products') }}";
-    }
-
-    function viewReceipt() {
-        window.open("#", "_blank");
-    }
-
-  </script>
+        }
+    });
+</script>
 
 {% endblock content %}

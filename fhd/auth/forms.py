@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import PasswordField, SubmitField, EmailField, StringField, DateField, SelectField
+from wtforms.fields import PasswordField, SubmitField, EmailField, StringField, DateField, SelectField, BooleanField
 from wtforms.validators import InputRequired, DataRequired, Length, ValidationError, EqualTo, Email 
 import re
 from wtforms.validators import ValidationError
@@ -52,4 +52,5 @@ class RegistrationForm(FlaskForm):
     phone = StringField(label='Phone')
     dob = DateField(label='Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
     depot_id = SelectField(label='Depot', choices=[], validators=[DataRequired()])
+    isrural = BooleanField('Are you located more than 20km from your depot?')
     submit = SubmitField("Register")

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Receipt{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='receipt.css') }}">
+
+<div class="receipt_container">
+    <h1 style="text-align: right;">RECEIPT</h1><br>
+    <h5 style="text-align: right;">{{ depot_name }} Depot</h5>
+    <p style="text-align: right;">{{ depot_addr }}</p>
+    <br><hr><br>
+    <b style="float: right;">Invoice No. : {{ invoice }}</b><br>
+    <b style="float: right;">Date: {{ date_issued.strftime("%d-%m-%Y") }}</b>
+    <p style="text-align: left;">Customer Name: {{ customer_name }}</p> 
+    <p style="text-align: left;"> Shipping Address: {{ user_addr }} </p><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Product Name</th>
+                <th>Unit</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_details %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.unit }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h6 style="text-align: right; margin-top: 20px;">Shipping Fee: ${{ shipping_fee }} <br> 
+    </h6>
+    <h5 style="text-align: right; margin-top: 20px;">Grand Total: ${{ grand_total }} <br> 
+        <span style="font-size: smaller; font-style: italic;">(inclusive of ${{ gst }} GST)</span>
+    </h5>
+    {% if account_balance %}
+    <h5 style="text-align: right; margin-top: 20px;">Account Balance: ${{ account_balance }}</h5>
+    {% else %}
+    <h5 style="text-align: right; margin-top: 20px;">Account Balance: $0.00</h5>
+    {% endif %}
+    <p style="text-align: center; font-style: italic;">Thank you for shopping with us!</p>
+</div>
+<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <a href="#" onclick="generatePDF('{{ invoice }}')" class="btn btn-sm btn-primary">Generate PDF</a>
+</div>
+
+<script>
+    function generatePDF(invoice) {
+        var url;
+        if ("{{ session['user_role_id'] }}" == 2 || "{{ session['user_role_id'] }}" == '2') {
+            url = "{{ url_for('account_holder.generate_pdf', invoice_id=invoice_id) }}";
+        } else {
+            url = "{{ url_for('customer.generate_pdf', invoice_id=invoice_id) }}";
+        }
+        window.location.href = url;
+    }
+</script>
+
+{% endblock content %}

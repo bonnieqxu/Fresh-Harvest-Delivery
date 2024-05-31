@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% block title %}Local Manager View a Box{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ url_for('local_manager.view_boxes') }}" id="dashboard-link"
+                style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                << Back to View Boxes</a>
+            <a href="{{ url_for('local_manager.add_box_content', box_id=box_id) }}" id="add-items-link"
+                style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: none;">
+                << Add More Items</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h1>{{ box_product_name }}</h1>
+            <a href="#" class="btn btn-danger" id="clear-items-btn" onclick="confirmClear(event, '{{ url_for('local_manager.clear_box') }}{% if box_id %}?box_id={{ box_id }}{% endif %}')" style="display: none;">Clear Items</a>
+        </div>
+        <hr>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% if box_details %}
+            <form id="orderForm" method="post" action="{{ url_for('local_manager.confirm_box') }}{% if box_id %}?box_id={{ box_id }}{% endif %}">
+                <table class="table table-striped table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Product Id</th>
+                            <th style="width: 15%;">Image</th>
+                            <th style="width: 20%;">Name</th>
+                            <th style="width: 20%;">Unit</th>
+                            <th style="width: 20%;">In-box Quantity</th>
+                            <th style="width: 10%;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for box_detail in box_details %}
+                        <tr>
+                            <td>{{ box_detail[0] }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                                    {% if box_detail[2] %}
+                                        <!-- Product Image -->
+                                        <img src="data:image/jpeg;base64,{{ box_detail[2] }}" alt="{{ box_detail[1] }}" width="50px" height="45px">
+                                    {% else %}
+                                    <!-- Placeholder when there's no image -->
+                                    <div style="width: 50px; height: 45px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center;">
+                                        <span style="color: #ccc;">Image coming soon</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>{{ box_detail[1] }}</td>
+                            <td>{{ box_detail[3] }} {{ box_detail[4] }}</td>
+                            
+                            <td>
+                                <input class="form-control text-center" type="number" id="quantity_{{ box_detail[0] }}"
+                                    name="quantity_{{ box_detail[0] }}" min="1" value="{{ box_detail[5] }}"
+                                    data-unit-weight="{{ box_detail[3] }}" onchange="updateTotalWeight()" disabled>
+                            </td>
+                            <td>
+                                <a href="#" onclick="confirmDelete(event, '{{ url_for('local_manager.delete_box_detail', item_product_id=box_detail[0]) }}?box_id={{ box_id }}')" class="btn btn-danger btn-sm delete-btn" style="display: none;">
+                                    <i class="fas fa-minus-circle"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h5>Total Weight: <span id="total-weight">{{ total_weight }}</span> kg</h5>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center" style="gap: 10px;">
+                        <button type="submit" class="btn btn-primary" id="confirm-box-btn" style="display: none;">Confirm Box</button>
+                        <button type="button" class="btn btn-danger" id="cancel-edit-btn" onclick="cancelEditing()" style="display: none;">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="edit-box-btn" onclick="enableEditing()">Edit Box</button>
+                    </div>
+                </div>
+            </form>
+            {% else %}
+            <div class="alert alert-info" role="alert">No items in the box! Click <a href="{{ url_for('local_manager.add_box_content', box_id=box_id) }}" style="text-decoration: underline; color: #007bff;">here</a> to add products.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    let initialQuantities = {};
+
+    function confirmDelete(event, url) {
+        event.preventDefault();
+        if (confirm("Are you sure you want to delete this item?")) {
+            window.location.href = url;
+        }
+    }
+
+    function confirmClear(event, url) {
+        event.preventDefault();
+        if (confirm("Are you sure you want to clear all the items?")) {
+            window.location.href = url;
+        }
+    }
+
+    function updateTotalWeight() {
+        let totalWeight = 0;
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            const unitWeight = parseFloat(input.getAttribute('data-unit-weight'));
+            const quantity = parseInt(input.value);
+            totalWeight += unitWeight * quantity;
+        });
+        document.getElementById('total-weight').innerText = totalWeight.toFixed(2);
+    }
+
+    function enableEditing() {
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            initialQuantities[input.id] = input.value; // Store the initial quantity
+            input.removeAttribute('disabled');
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.style.display = 'inline-block';
+        });
+        document.getElementById('confirm-box-btn').style.display = 'inline-block';
+        document.getElementById('cancel-edit-btn').style.display = 'inline-block';
+        document.getElementById('clear-items-btn').style.display = 'inline-block';
+        document.getElementById('dashboard-link').style.display = 'none';
+        document.getElementById('edit-box-btn').style.display = 'none'; // Hide the Edit Box button
+        document.getElementById('add-items-link').style.display = 'inline-block'; // Show the Add More Items link
+    }
+
+    function cancelEditing() {
+        if (confirm("Are you sure you want to cancel editing?")) {
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.value = initialQuantities[input.id]; // Restore the initial quantity
+            input.setAttribute('disabled', 'disabled');
+        });
+        updateTotalWeight(); // Update total weight with restored quantities
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.style.display = 'none';
+        });
+        document.getElementById('confirm-box-btn').style.display = 'none';
+        document.getElementById('cancel-edit-btn').style.display = 'none';
+        document.getElementById('clear-items-btn').style.display = 'none';
+        document.getElementById('dashboard-link').style.display = 'inline-block';
+        document.getElementById('edit-box-btn').style.display = 'inline-block'; // Show the Edit Box button
+        document.getElementById('add-items-link').style.display = 'none'; // Hide the Add More Items link
+        }
+    }
+
+    // Initialize total weight calculation on page load
+    document.addEventListener('DOMContentLoaded', (event) => {
+        updateTotalWeight();
+    });
+</script>
+{% endblock content %}

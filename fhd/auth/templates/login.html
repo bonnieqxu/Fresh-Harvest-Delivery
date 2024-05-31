@@ -4,7 +4,7 @@
 
 <div class="authentication">
     <h1 class="text-center">Log in</h1>
-    <form action="{{ url_for('auth.login') }}" method="post" class="mt-4">
+    <form id="login-form" action="{{ url_for('auth.login') }}" method="post" class="mt-4">
         {{ form.csrf_token }}
         <div class="form-group mb-3">
             {{ form.email.label }}<span style="color:red;">*</span>

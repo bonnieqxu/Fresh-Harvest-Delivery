@@ -79,6 +79,8 @@ def logout():
     session.pop("loggedin", None)
     session.pop('shoppingcart', None)
     session.pop('user_depot', None)
+    session.pop('box_contents', None)
+    session.pop('box_id', None)
     return redirect(url_for("auth.login"))
 
 
@@ -100,7 +102,8 @@ def register():
             address=form.address.data,
             phone=form.phone.data,
             dob=form.dob.data,
-            depot_id=form.depot_id.data
+            depot_id=form.depot_id.data,
+            isrural = form.isrural.data
         )
         flash("Thank you for signing up", "success")
         return redirect(url_for('auth.login'))  

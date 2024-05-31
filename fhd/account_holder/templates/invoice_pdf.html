@@ -1,0 +1,50 @@
+<div class="header">
+    <h2>Fresh Harvest Delivery Limited</h2>
+    <hr style="width: 42%; margin: 0;">
+    <h4 style="text-align: left; font-style: italic;">{{ depot_name }} Depot</h4>
+    <p style="text-align: left; font-style: italic;">{{ depot_addr }}</p>
+</div>
+
+<div class="receipt_container">
+    <h1 style="text-align: right;">INVOICE</h1>
+    <br><hr><br>
+    <b style="float: right;">Invoice Number: {{ invoice }}</b><br>
+    <b style="float: right;">Date: {{ date_issued.strftime("%d-%m-%Y") }}</b>
+    <p style="text-align: left;"><strong>Customer Name:</strong> {{ customer_name }}</p> 
+    <p style="text-align: left;"><strong>Business Name:</strong> {{ account_holder_info['business_name'] }}</p>
+    <p style="text-align: left;"><strong>Contact Number:</strong> {{ account_holder_info['business_phone'] }}</p>
+    <p style="text-align: left;"><strong>Shipping Address:</strong>  {{ account_holder_info['business_address'] }} </p><br>
+   <br><br>
+    
+        <table style="width: 100%;">
+            <thead style="background-color: lightgrey;">
+                <tr>
+                    <th style="width: 5%;">Item</th>
+                    <th style="width: 25%;">Product Name</th>
+                    <th style="width: 20%;">Unit</th>
+                    <th style="width: 20%;">Price</th>
+                    <th style="width: 10%;">Quantity</th>
+                    <th style="width: 25%;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order_details %}
+                <tr>
+                    <td style="width: 5%; text-align: center;">{{ loop.index }}</td>
+                    <td style="width: 25%; text-align: center;">{{ item.product_name }}</td>
+                    <td style="width: 20%; text-align: center;">{{ item.unit }}</td>
+                    <td style="width: 20%; text-align: center;">${{ item.price }}</td>
+                    <td style="width: 10%; text-align: center;">{{ item.quantity }}</td>
+                    <td style="width: 25%; text-align: center;">${{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h5 style="text-align: right; margin-top: 20px;">Shipping Fee: ${{ shipping_fee }} <br> 
+        </h5>
+    <h4 style="text-align: right; margin-top: 20px;">Grand Total: ${{ grand_total }} <br> 
+        <span style="font-size: smaller; font-style: italic;">(inclusive of ${{ gst }} GST)</span>
+    </h4>
+    <br><br><br><br><br><br>
+    <p style="text-align: center; font-style: italic;">Thank you for shopping with us!</p>
+</div>

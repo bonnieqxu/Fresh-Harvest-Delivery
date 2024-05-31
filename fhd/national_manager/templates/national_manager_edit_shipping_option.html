@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Edit Shipping Option{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Edit Shipping Option</h1>
+            <hr>
+            <form method="POST" action="{{ url_for('national_manager.edit_shipping_option', shipping_option_id=shipping_option_id) }}">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.shippingOption.label }}<span style="color:red;">*</span>
+                    {{ form.shippingOption(class="form-control") }}
+                    {% for error in form.shippingOption.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.price.label }}<span style="color:red;">*</span>
+                    {{ form.price(class="form-control") }}
+                    {% for error in form.price.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.status.label }}<span style="color:red;">*</span>
+                    {{ form.status(class="form-control") }}
+                    {% for error in form.status.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="javascript:history.back()" class="btn btn-primary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

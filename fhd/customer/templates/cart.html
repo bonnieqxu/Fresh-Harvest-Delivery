@@ -16,7 +16,12 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-12">
-                    <a href="javascript:history.back()"
+                    <a href="                      
+                    {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+                    {{ url_for('account_holder.view_depot_products') }}
+                    {% else %}
+                    {{ url_for('customer.view_depot_products') }}
+                    {% endif %}"
                         style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
                         << Continue Shopping</a>
                 </div>
@@ -48,10 +53,15 @@
                                 height="45"> <!-- Product Image -->
                             {% endif %}
                         </td>
-                        <td>{{ product.name }}</td>
+                        <td><a href="{{ url_for('main.view_product', product_id=product.product_id) }}">{{ product.name }}</a></td>
                         <td>{{ product.unit }}</td>
-                        <form action="{{ url_for('customer.updatecart', product_id=product.product_id) }}"
-                            method="post">
+                        <form action="
+                            {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+                                {{ url_for('account_holder.updatecart', product_id=product.product_id) }}
+                            {% else %}
+                                {{ url_for('customer.updatecart', product_id=product.product_id) }}
+                            {% endif %}
+                            " method="post">
                             <td>${{ product.price }}</td>
                             <td><input type="number" name="quantity" min="1" value="{{product.quantity }}"
                                     style="width: 3em; margin-left: 5px; margin-right: 5px;"></td>
@@ -59,8 +69,13 @@
                             <td>${{ "%0.2f"|format(subtotal|float)}}</td>
                             <td><button type="submit" class="btn btn-sm btn-primary">Update</button></td>
                         </form>
-                        <td><a href="{{url_for('customer.deleteitem', id=product.product_id)}}"
-                                class="btn btn-sm btn-danger">Remove</a>
+                        <td><a href="
+                            {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+                                {{ url_for('account_holder.deleteitem', id=product.product_id) }}
+                            {% else %}
+                                {{ url_for('customer.deleteitem', id=product.product_id) }}
+                            {% endif %}
+                            " class="btn btn-sm btn-danger">Remove</a></td>
                     </tr>
 
                     {% endfor %}
@@ -69,13 +84,23 @@
             <table class="table table-sm">
                 <tr>
                     <td>
+                        <h6>Shipping Fee: ${{shipping_fee}} </h6>
                         <h5>Grand Total: ${{grandtotal}} (inclusive of ${{tax}} GST)</h5>
                     </td>
-                    <!--                         <td><a href="#" id="checkoutButton" class="btn btn-sm btn-primary float-right">Checkout</a></td>                       -->
-                    <td><a href="{{ url_for('customer.checkout') }}" id="checkoutButton"
-                            class="btn btn-sm btn-primary float-right">Checkout</a></td>
-                    <td><a href="#" onclick="confirmDelete('{{url_for('customer.clearcart')}}')"
-                            class="btn btn-sm btn-danger float-right">Clear cart</a></td>
+                    <td><a href="
+                        {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+                            {{ url_for('account_holder.checkout') }}
+                        {% else %}
+                            {{ url_for('customer.checkout') }}
+                        {% endif %}
+                        " id="checkoutButton" class="btn btn-sm btn-primary float-right">Checkout</a></td>
+                    <td><a href="#" onclick="confirmDelete(
+                        {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+                            '{{ url_for('account_holder.clearcart') }}'
+                        {% else %}
+                            '{{ url_for('customer.clearcart') }}'
+                        {% endif %}
+                        )" class="btn btn-sm btn-danger float-right">Clear cart</a></td>
                 </tr>
             </table>
             {% else %}
@@ -90,4 +115,3 @@
 </div>
 
 {% endblock content %}
-

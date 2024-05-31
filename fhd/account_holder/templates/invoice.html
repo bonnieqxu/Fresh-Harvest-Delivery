@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Invoice{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='receipt.css') }}">
+
+<div class="receipt_container">
+    <h1 style="text-align: right;">INVOICE</h1><br>
+    <h5 style="text-align: right;">{{ depot_name }} Depot</h5>
+    <p style="text-align: right;">{{ depot_addr }}</p>
+    <br><hr><br>
+    <b style="float: right;">Invoice No. : {{ invoice }}</b><br>
+    <b style="float: right;">Date: {{ date_issued.strftime("%d-%m-%Y") }}</b>
+    <p style="text-align: left;"><strong>Customer Name:</strong> {{ customer_name }}</p> 
+    <p style="text-align: left;"><strong>Business Name:</strong> {{ account_holder_info['business_name'] }}</p>
+    <p style="text-align: left;"><strong>Contact Number:</strong> {{ account_holder_info['business_phone'] }}</p>
+    <p style="text-align: left;"><strong>Shipping Address:</strong>  {{ account_holder_info['business_address'] }} </p><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Product Name</th>
+                <th>Unit</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_details %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ item.product_name }}</td>
+                <td>{{ item.unit }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h6 style="text-align: right; margin-top: 20px;">Shipping Fee: ${{ shipping_fee }} <br> 
+    </h6>
+    <h5 style="text-align: right; margin-top: 20px;">Grand Total: ${{ grand_total }} <br> 
+        <span style="font-size: smaller; font-style: italic;">(inclusive of ${{ gst }} GST)</span>
+    </h5>
+    
+    <p style="text-align: center; font-style: italic;">Thank you for shopping with us!</p>
+</div>
+
+<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <a href="#" onclick="generatePDF('{{ invoice }}')" class="btn btn-sm btn-success">Generate PDF</a>
+    <a href="javascript:history.back()" class="btn btn-sm btn-primary">Back</a>
+</div>
+
+
+
+<script>
+    function generatePDF(invoice) {
+        var url;
+        url = "{{ url_for('account_holder.generate_pdf_invoice', invoice_id=invoice_id) }}";
+        window.location.href = url;
+    }
+</script>
+
+{% endblock content %}

@@ -23,7 +23,19 @@ block content %}
                     </div>
                 </div>
             </div>
-
+        
+        <!-- Manage Produce Block -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Manage Product</div>
+                <div class="card-body">
+                    <div class="d-flex flex-column">
+                        <a href="{{ url_for('local_manager.local_manager_product_list', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View/Edit Product</a>
+                        <a href="#" class="btn btn-info mb-2">Discontinue Product</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             <!-- Manage Inventory Block -->
             <div class="col-md-4">
@@ -46,7 +58,7 @@ block content %}
                     <div class="card-header">Manage Orders</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View/Edit Order Status</a>
+                            <a href="{{ url_for('local_manager.update_order_statuses') }}" class="btn btn-info mb-2">View/Edit Order Status</a>
                         </div>
                     </div>
                 </div>
@@ -58,7 +70,7 @@ block content %}
                     <div class="card-header">Manage Messages</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Inbox /View Messages</a>
+                            <a href="{{ url_for('local_manager.getMessages') }}" class="btn btn-info mb-2">Inbox /View Messages</a>
                         </div>
                     </div>
                 </div>
@@ -70,9 +82,8 @@ block content %}
                     <div class="card-header">Manage Pre-made Boxes</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a New Items</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit ltems</a>
-                            <a href="#" class="btn btn-info mb-2">Delete Items</a>
+                            <a href="{{ url_for('local_manager.create_box') }}" class="btn btn-info mb-2">Add New Box</a>
+                            <a href="{{ url_for('local_manager.view_boxes') }}" class="btn btn-info mb-2">View/Edit/Delete Boxes</a>
                         </div>
                     </div>
                 </div>
@@ -108,10 +119,10 @@ block content %}
             <!-- Manage Account Applications Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Account Applications</div>
+                    <div class="card-header">Manage Account Holder Applications</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View/Approve Account Applications</a>
+                            <a href="{{ url_for('local_manager.view_requests')}}" class="btn btn-info mb-2">View/Approve Account Applications</a>
                         </div>
                     </div>
                 </div>

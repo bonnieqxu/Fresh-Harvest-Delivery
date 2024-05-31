@@ -69,7 +69,7 @@
         </div>
         <div class="form-group">
             <label for="depot_id">Depot{% if form.depot_id.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            <select id="depot_id" name="depot_id" class="form-control" required>
+            <select id="depot_id" name="depot_id" class="form-select" required>
                 <option value="" disabled selected>Please Select Your Local Depot</option>
                 <!-- Populate options dynamically from your database -->
                 {% for depot in depots %}
@@ -77,6 +77,13 @@
                 {% endfor %}
             </select>
             {% for error in form.depot_id.errors %}
+                <small class="form-text text-danger">{{ error }}</small>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.isrural.label }}
+            {{ form.isrural }}
+            {% for error in form.isrural.errors %}
                 <small class="form-text text-danger">{{ error }}</small>
             {% endfor %}
         </div>

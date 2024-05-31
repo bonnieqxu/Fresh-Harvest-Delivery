@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Reply new message{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Reply</h1>
+            <hr>
+            <h3>Original Message</h3>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Sender:</strong> {{ message[0][-1] }}</p>
+                    <p><strong>Content:</strong> {{ message[0][3] }}</p>
+                </div>
+            </div>
+            <hr>
+            <form method="POST" action="{{ url_for('local_manager.reply_message', message_id=message[0][0]) }} " enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.message_content.label }}<span style="color:red;">*</span>
+                    {{ form.message_content(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-sm">Send</button>
+                    <a href="javascript:history.back()" class="btn btn-sm btn-danger">Cancel</a>
+                </div>
+                <input type="hidden" name="message_category" value="{{ message[0][6] }}">
+                <input type="hidden" name="sender_id" value="{{ message[0][1] }}">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

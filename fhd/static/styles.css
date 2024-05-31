@@ -126,15 +126,23 @@ body {
     justify-content: top;
     align-items: center;
 }
-form {
+#login-form {
     width: 100%;
     max-width: 500px;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 .login-btn {
     width: 100%;
 }
 
-  
+.product-status-available {
+    color: green;
+}
+.product-status-low {
+    color: orange;
+}
+.product-status-unavailable {
+    color: red;
+}

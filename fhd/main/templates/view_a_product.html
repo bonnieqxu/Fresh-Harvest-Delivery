@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{% endblock %}
+{% block title %}{{ product[0] }}{% endblock %}
 {% block content %}
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
@@ -25,33 +25,67 @@
         </div>
         <div class="col-lg-6">
             <h4> {{ product[0] }}</h4> <!-- name -->
-            <small>{{ product[-2] }} {{ product[-1] }}</small> <!-- weight -->
+            <small>{{ product[-4] }} {{ product[-3] }}</small> <!-- weight -->
             <h4> ${{ product[1] }}</h4> <!-- price -->
             <p> {{ product[3] }}</p>
+            {% set product_quantity = namespace(quantity=0) %}
+            {% if session['shoppingcart'] %}
+                {% for key, product_in_session in session['shoppingcart'].items() %}
+                    {% if key|int == product_id|int %}
+                        {% set product_quantity.quantity  = product_in_session['quantity']|int %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+                
+    <!-- Box Contents Section -->
+    {% if box_contents %}
+
+        Premade Box Content:
+
+            {% for item in box_contents %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                * {{ item[1]}} (Unit: {{ item[2]}} {{ item[3] }}) X {{ item[4]}}
+            </li>
+            {% endfor %}
+
+    {% endif %}
+
+        <!-- order Section -->
+        <div style="margin-top: 20px;">
             <div class="d-flex align-items-center" style="padding-bottom: 5px; flex-direction: row;">
                 <label for="quantity_{{ product_id }}">Quantity:</label>
-                <input type="number" id="quantity_{{ product_id }}" name="quantity_{{ product_id }}" min="1" value="1" style="width: 3em; margin-left: 5px; margin-right: 5px;">
+                <input type="number" id="quantity_{{ product_id }}" name="quantity_{{ product_id }}" min="1" max="{{product[8]}}" value="{{ product_quantity.quantity }}" style="width: 3em; margin-left: 5px; margin-right: 5px;">
             </div>
             <br>
             <div class="d-flex align-items-center" style="padding-bottom: 5px; flex-direction: row;">
-                <a href="#" onclick="addToCart('{{ product_id }}');" class="btn btn-sm btn-primary">Add to cart</a>
+                <a href="#" onclick="addToCart('{{ product_id }}', '{{ product[8]}}');" class="btn btn-sm btn-primary">Add to cart</a>
             </div>
         </div>
-       
     </div>
 </div>
 
+
 <script>
-    function addToCart(product_id) {
+    function addToCart(product_id, quantity_in_stock) {
         var quantityInputId = 'quantity_' + product_id; // Construct the ID of the quantity input field based on the product ID
         var quantity = document.getElementById(quantityInputId).value; // Get the quantity from the input field associated with the product
 
-        if (quantity.trim() === '') {
+        if (quantity.trim() === '' || parseInt(quantity) === 0) {
             alert('Please enter a quantity before adding to cart.');
             return false;
         }
+        if (parseInt(quantity) > parseInt(quantity_in_stock)){
+            alert('We do not have sufficient stock on hand. Please enter a quantity equal to or less than ' + quantity_in_stock + '.');
+            return false;
+        }
 
-        var url = "{{ url_for('customer.addItem', product_id='__product_id__') }}";
+        var url;
+        if ({{ session['user_role_id'] }} == 1 || {{ session['user_role_id'] }} == '1') {
+            url = "{{ url_for('customer.addItem', product_id='__product_id__') }}";
+        } else {
+            url = "{{ url_for('account_holder.addItem', product_id='__product_id__') }}";
+        }
+        
         url = url.replace('__product_id__', product_id);
 
         // Append the quantity to the URL

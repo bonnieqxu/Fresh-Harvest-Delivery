@@ -3,20 +3,19 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='payment.css') }}"">
+<link rel="stylesheet" href="{{ url_for('static', filename='payment.css') }}">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-    body {
-        background-image: url('/static/images/veges.jpg'); 
-        background-size: cover; 
-        background-repeat: no-repeat; 
-    }
-</style>
 
-
-<h1 style="margin-top: 30px; text-align: center; font-weight: bold;"> Amount Due: {{grandtotal}} </h1>
-
+{% if payment_amount_diff %}
+<h5 style="margin-top: 30px; text-align: center; font-weight: bold;">Payment Amount: ${{payment_amount_diff}} </h5>
+{% else %}
+<h6 style="margin-top: 30px; text-align: center; font-weight: bold;">Shipping Fee: ${{shipping_fee}} </h6>
+<h5 style="margin-top: 30px; text-align: center; font-weight: bold;">
+    Grand Total: ${{ grandtotal }} <br>
+    <span style="font-size: smaller; font-style: italic;">(inclusive of ${{ tax }} GST)</span>
+</h5>
+{% endif %}
 <div class="payment_container" id="paymentFormSection" style="width: 45%; margin: 30px auto;">
 
     <h4 style="text-align: center; font-weight: bold;">Payment Details</h4>
@@ -89,9 +88,12 @@
     <div  class="centered-buttons" style="margin-top: 50px; margin-bottom: 20px;">
         <form id = "paymentForm" action="{{ url_for('customer.payment') }}" method="POST">
             <input type="hidden" name="grandtotal" value="{{ grandtotal }}">
+            <input type="hidden" name="tax" value="{{ tax }}">
+            <input type="hidden" name="shipping_fee" value="{{ shipping_fee }}">
             <input type="hidden" name="order_hdr_id" value="{{ order_hdr_id }}">
             <button type="submit" id="confirmPaymentButton" class="btn btn-primary">Confirm Payment</button>
-            <button type="button" class="btn btn-danger" id="cancelPaymentButton" onclick="goBack()">Cancel</button>
+            <a href="#" class="btn btn-danger" id="cancelPaymentButton" 
+            onclick="confirmCancel(event, '{{ url_for('customer.dashboard') }}')">Cancel</a>
         </form>
     </div>
 <br>
@@ -108,15 +110,7 @@
     // Prevent form submission
     event.preventDefault();
     
-    // Validate cardholder name
-    if (!validateCardName()) {
-        // Display error message
-        document.getElementById('errorMsg').innerText = 'Please enter a valid cardholder name';
-        return; // Stop form submission if cardholder name is invalid
-    } else {
-        // Clear any existing error message
-        document.getElementById('errorMsg').innerText = '';
-    }
+
     
     // Validate credit card details
     var cardNumber = document.getElementById('cardNumber').value;
@@ -129,6 +123,16 @@
     if (cardNumber.length !== 16 || isNaN(cardNumber)) {
         document.getElementById('errorMsg').innerText = 'Please enter a valid 16-digit card number';
         return;
+    }
+
+    // Validate cardholder name
+    if (!validateCardName()) {
+        // Display error message
+        document.getElementById('errorMsg').innerText = 'Please enter a valid cardholder name';
+        return; // Stop form submission if cardholder name is invalid
+    } else {
+        // Clear any existing error message
+        document.getElementById('errorMsg').innerText = '';
     }
 
     // Validate CVV
@@ -148,6 +152,12 @@ function validateCardName() {
     return isValid;
 }
 
+function confirmCancel(event, url) {
+        event.preventDefault();
+        if (confirm("Are you sure you want to cancel this payment?")) {
+            window.location.href = url;
+        }
+}
 </script>
 {% endblock content %}
 

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>{{ product[1] }}</h1>
+            <hr>
+            
+            <form method="POST" action="{{ url_for('national_manager.national_manager_edit_product', product_id=product_id) }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.product_price.label }} ($)
+                    {{ form.product_price(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_quantity.label }}
+                    {{ form.product_quantity(class="form-control") }}
+                </div>
+                <hr>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    <a href="{{ url_for('national_manager.national_manager_product_list') }}" class="btn btn-sm btn-primary">Back</a>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}
