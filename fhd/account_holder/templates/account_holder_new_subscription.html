@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Add New Subscription{% endblock %}
+{% block content %}
+
+<script>
+    // This script will execute once the window has fully loaded
+    // Retrieves the confirmation message if there is one
+    window.onload = function() {
+        var confirmation_message = "{{ confirmation_message }}";
+        if (confirmation_message) {
+            if (confirm(confirmation_message)) {
+                // If the user confirms, submit the form with the ID "subscription_form"
+                document.getElementById("subscription_form").submit();
+        }
+        }
+    };
+</script>
+
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('account_holder.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1>Add New Subscription</h1>
+            <hr>
+            <form method="POST" id="subscription_form" action="{{ url_for('account_holder.add_new_subscription') }}" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div class="form-group mb-3">
+                    {{ form.box_frequency.label }}<span style="color:red;">*</span>
+                    {{ form.box_frequency(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_category.label }}<span style="color:red;">*</span>
+                    {{ form.box_category(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.box_size.label }}<span style="color:red;">*</span>
+                    {{ form.box_size(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.subscription_quantity.label }}<span style="color:red;">*</span>
+                    {{ form.subscription_quantity(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary btn-sm">Pay Now</button>
+                    <a href="{{ url_for('account_holder.view_subscription') }}" class="btn btn-sm btn-danger">Cancel</a>
+                </div>
+                <input type="hidden" name="confirmation" value="{{ confirmation }}">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

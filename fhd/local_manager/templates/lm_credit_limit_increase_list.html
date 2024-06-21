@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Credit Limit Increase Requests{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12 mb-3">
+                <a href="{{ url_for('local_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1 class="mb-4">Credit Limit Increase Applications</h1>
+            <table class="table table-striped table-hover">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>Item</th>
+                        <th>Date</th>
+                        <th>Applicant</th>
+                        <th>Business Name</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td class="text-center align-middle">{{ request[8].strftime("%d-%m-%Y") }}</td>
+                        <td class="text-center align-middle">{{ request[9] }}</td>
+                        <td class="text-center align-middle">{{ request[10] }}</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ url_for('local_manager.view_credit_limit_increase_request', request_id=request[0]) }}">View Application Details</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

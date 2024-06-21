@@ -4,6 +4,11 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('customer.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Apply to become Account Holder</h1>
             <hr>
             <form method="POST" action="{{ url_for('customer.apply_account_holder') }}">
@@ -29,10 +34,9 @@
                         <small class="form-text text-danger">{{ error }}</small>
                     {% endfor %}
                 </div>
-                <hr>
                     <!-- Message Input Section -->
                     <div class="form-group mb-3">
-                        <label for="message">Please Enter a Message:</label>
+                        <label for="message">Please provide a reason: <span style="color:red;">*</span></label>
                         <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
                     </div>
                     

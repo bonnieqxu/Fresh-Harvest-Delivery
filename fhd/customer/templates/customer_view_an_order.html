@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-between align-items-center">
             <h1>Order # {{ order_id }} Details</h1>
-        {% if can_cancel %}
+        {% if can_cancel and invoice_info[3] != "subscription_order" %}
             <a href="#" class="btn btn-danger" id="cancelOrderBtn" 
                onclick="confirmCancel(event, 
                {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
@@ -87,7 +87,7 @@
                     <input type="hidden" name="grandtotal" value="{{ invoice_info[0] }}">
                     <input type="hidden" name="original_grandtotal" value="{{ invoice_info[0] }}">
                     <input type="hidden" name="original_quantities" value='{% for detail in order_details %}{{ detail[3] }}{% if not loop.last %},{% endif %}{% endfor %}'>
-                    {% if can_modify %}
+                    {% if can_modify and invoice_info[3] != "subscription_order" %}
                     <div>
                         <button type="button" class="btn btn-primary" id="editBtn" onclick="toggleEdit()">Edit order</button>
                         <button type="button" class="btn btn-success" style="display: none;" id="saveBtn" onclick="handleSubmit()">Save</button>
@@ -119,6 +119,7 @@
 </style>
 <script>
     let amountDiff = 0;
+    const gst_percentage = {{ gst_percentage }}; // GST percentage passed from backend
 
     function toggleEdit() {
         const quantityInputs = document.querySelectorAll('input[name^="quantity_"]');
@@ -200,7 +201,7 @@
 
         const shippingFee = parseFloat(document.querySelector('input[name="shipping_fee"]').value);
         grandTotal += shippingFee;
-        const totalTax = grandTotal * 0.15;
+        const totalTax = grandTotal * gst_percentage;
         const grandTotalWithTax = grandTotal;
 
         document.getElementById('grandTotal').innerText = grandTotalWithTax.toFixed(2);

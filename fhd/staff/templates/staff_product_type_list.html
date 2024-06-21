@@ -10,29 +10,33 @@
     }
 </script>
 <div class="container content" style="flex: 1 0 auto;">
-    <div class="row">
-        <div class="col-lg-8 offset-lg-2 my-5">
+    <div class="col-lg-8 offset-lg-2 my-5">
+        <div class="col-12">
+            <a href="{{ url_for('staff.dashboard') }}"
+                style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                &lt;&lt; Dashboard</a>
+        </div>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-between align-items-center">
             <h1>Product Type</h1>
+            <a href="{{ url_for('staff.staff_add_product_type') }}" class="btn btn-primary" role="button">Add New Product Type</a>
+            </div>
+        </div>
+        <div class="row">
             <hr>
-            <div class="container">
-                <div class="ml-auto d-flex">
-                  <a href="{{ url_for('staff.staff_add_product_type') }}" class="btn btn-primary" role="button">Add New Product Type</a>
-              </div>
-              <div class="container content" style="flex: 1 0 auto;">
-                <div class="row">
-                  <div class="col-lg-8 offset-lg-2 my-5">
-                  <form method="POST" action="{{ url_for('staff.staff_search_product_type') }}">
-                    {{ form.csrf_token }}
-                    <div class="form-group mb-3">
-                      {{ form.product_name.label }}
-                      {{ form.product_name(class="form-control") }}
-                  </div>
+            <div class="row">
+                <form method="POST" action="{{ url_for('staff.staff_search_product_type') }}">
+                  {{ form.csrf_token }}
                   <div class="form-group mb-3">
-                      {{ form.product_category.label }}
-                      {{ form.product_category(class="form-select") }}
-                  </div>
-                  <div class="form-group mb-3">
-                    <button type="submit" class="btn btn-primary btn-block">Search</button>
+                    {{ form.product_name.label }}
+                    {{ form.product_name(class="form-control") }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.product_category.label }}
+                    {{ form.product_category(class="form-select") }}
+                </div>
+                <div class="form-group mb-3">
+                  <button type="submit" class="btn btn-primary btn-block">Search</button>
                 </div>
               </form>
               </div>
@@ -65,30 +69,27 @@
                           </table>
                         </div>
                       </div>
-                  </div>
-              
-                            <!-- Pagination -->
-                            <nav aria-label="Product navigation" style="margin-top: 20px;">
-                              <ul class="pagination justify-content-center">
-                                  {% if page > 1 %}
-                                      <li class="page-item">
-                                          <a class="page-link" href="{{ url_for('staff.staff_search_product_type', page=page-1, product_name=product_name, product_category=product_category) }}">Previous</a>
-                                      </li>
-                                  {% endif %}
-                                  {% for p in range(1, total_pages + 1) %}
-                                      <li class="page-item {% if p == page %}active{% endif %}">
-                                          <a class="page-link" href="{{ url_for('staff.staff_search_product_type', page=p, product_name=product_name, product_category=product_category) }}">{{ p }}</a>
-                                      </li>
-                                  {% endfor %}
-                                  {% if page < total_pages %}
-                                      <li class="page-item">
-                                          <a class="page-link" href="{{ url_for('staff.staff_search_product_type', page=page+1, product_name=product_name, product_category=product_category) }}">Next</a>
-                                      </li>
-                                  {% endif %}
-                              </ul>
-                          </nav>
-                          
         </div>
+        <!-- Pagination -->
+        <nav aria-label="Product navigation" style="margin-top: 20px;">
+            <ul class="pagination justify-content-center">
+                {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('staff.staff_search_product_type', page=page-1, product_name=product_name, product_category=product_category) }}">Previous</a>
+                    </li>
+                {% endif %}
+                {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="{{ url_for('staff.staff_search_product_type', page=p, product_name=product_name, product_category=product_category) }}">{{ p }}</a>
+                    </li>
+                {% endfor %}
+                {% if page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('staff.staff_search_product_type', page=page+1, product_name=product_name, product_category=product_category) }}">Next</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </div>
 {% endblock %}

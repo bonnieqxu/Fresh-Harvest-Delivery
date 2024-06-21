@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 {% block title %}National Manager Dashboard{% endblock %}
+{% block body_class %}
+    {% if session['user_role_id'] == 1 %}
+        customer
+    {% elif session['user_role_id'] == 2 %}
+        account-holder
+    {% elif session['user_role_id'] == 3 %}
+        staff
+    {% elif session['user_role_id'] == 4 %}
+        local-manager
+    {% elif session['user_role_id'] == 5 %}
+        national-manager
+    {% else %}
+        default
+    {% endif %}
+{% endblock %}
 {% block content %}
 <div class="container mt-5">
     <div class="text-center mb-4">
@@ -7,194 +22,8 @@
         <p>Select an option below to get started.</p>
     </div>
     <div class="container mt-3">
-        <!-- Top Row: Three blocks in a card deck -->
+        <!-- First Row: Three blocks in a card deck -->
         <div class="row">
-            <!-- Personal Profile Management Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Profile</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-primary mb-2">Update
-                                Account</a>
-                            <!-- <a href="password-update-url" class="btn btn-secondary mb-2">Change Password</a> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manage Produce Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Product Inventory</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('national_manager.national_manager_product_list') }}" class="btn btn-info mb-2">View/Edit Product</a>
-                            <a href="#" class="btn btn-info mb-2">Discontinue Produce</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manage Inventory Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Product Type</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('staff.staff_search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Middle Row: Three blocks in a card deck -->
-        <div class="row mt-4">
-            <!-- Manage Pre-made Boxes Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Pre-made Boxes</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a New Items</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit ltems</a>
-                            <a href="#" class="btn btn-info mb-2">Delete Items</a>
-                        </div>
-                    </div>
-                </div>
-            </div>            
-            <!-- Manage Orders Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Orders</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('national_manager.update_order_statuses') }}" class="btn btn-info mb-2">View/Edit Order Status</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manage Messages Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Messages</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('national_manager.getMessages') }}" class="btn btn-info mb-2">Inbox /View Messages</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Third Row: Three blocks in a card deck -->
-        <div class="row mt-4">
-            <!-- Manage Promotions Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Promotions</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Update Promotions</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--Manage News Block-->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage News</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a New News</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit News</a>
-                            <a href="#" class="btn btn-info mb-2">Delete News</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Manage Account Applications Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Account Applications</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('national_manager.view_requests')}}" class="btn btn-info mb-2">View/Approve Account Applications</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fourth Row: Three blocks in a card deck -->
-        <div class="row mt-4">
-            <!-- Manage Staff Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Staff</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a New Staff</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit Staff</a>
-                            <a href="#" class="btn btn-info mb-2">Delete Staff</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Reports and Analysis Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Reports and Analysis</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Revenue Report</a>
-                            <a href="#" class="btn btn-info mb-2">Sales Report</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Manage Credit Limit Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Credit Limit</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View/Set Account Holder Credit Limit</a>
-                            <a href="#" class="btn btn-info mb-2">Update Account Holder Total Credit Limit</a>
-                            <a href="#" class="btn btn-info mb-2">Approve/Reject Credit Limit Change Request</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Fifth Row: Three blocks in a card deck -->
-        <div class="row mt-4">
-            <!-- Manage Monthly Account Outstanding Balances Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Monthly Account Outstanding Balances</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View Monthly Account Outstanding Balances</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Manage Purchase Units Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Purchase Units</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('national_manager.add_product_weight') }}" class="btn btn-info mb-2">Add a New Unit</a>
-                            <a href="{{ url_for('national_manager.view_product_weight') }}" class="btn btn-info mb-2">View/Edit/Delete Unit</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- Manage Product Category Block -->
             <div class="col-md-4">
                 <div class="card">
@@ -207,30 +36,119 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Sixth Row: Three blocks in a card deck -->
-        <div class="row mt-4">
-            <!-- Manage Shippping Prices Block -->
+            <!-- Manage Purchase Units Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Shippping Option</div>
+                    <div class="card-header">Manage Purchase Units</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="{{ url_for('national_manager.addShippingOption') }}" class="btn btn-info mb-2">Add New Shipping Option</a>
-                            <a href="{{ url_for('national_manager.getShippingOptionList') }}" class="btn btn-info mb-2">View Shipping Option</a>
+                            <a href="{{ url_for('national_manager.add_product_weight') }}" class="btn btn-info mb-2">Add New Unit</a>
+                            <a href="{{ url_for('national_manager.view_product_weight') }}" class="btn btn-info mb-2">View/Edit/Delete Unit</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Manage Gift Cards Block -->
+            <!-- Manage Product Type Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Gift Cards</div>
+                    <div class="card-header">Manage Product Type</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a new Gift Card Options</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit Gift Card Options</a>
+                            <a href="{{ url_for('national_manager.nm_search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    
+        <!-- Second Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Product Inventory Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Product Inventory</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.national_manager_product_list') }}" class="btn btn-info mb-2">View/Update Product Inventory</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Orders Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Orders</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.update_order_statuses') }}" class="btn btn-info mb-2">View/Edit Order Status</a>
+                            <a href="{{ url_for('national_manager.view_daily_orders') }}" class="btn btn-info mb-2">View/Search Order</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Shipping Option Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Shipping Option</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.getShippingOptionList') }}" class="btn btn-info mb-2">View/Edit Shipping Option</a>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </div>
+
+        <!-- Third Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Staff Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Staff</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.add_staff')}}" class="btn btn-info mb-2">Add New Staff</a>
+                            <a href="{{ url_for('national_manager.manage_staff')}}" class="btn btn-info mb-2">View/Edit/Delete Staff</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Credit Limit Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Credit Limit</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.manage_credit_limits') }}" class="btn btn-info mb-2">View/Set Account Holder Credit Limit</a>
+                            <a href="{{ url_for('national_manager.view_credit_limit_increase_requests')}}" class="btn btn-info mb-2">Approve/Reject Credit Limit Change Request</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Account Holder Applications Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Account Holder Applications</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.view_requests')}}" class="btn btn-info mb-2">View/Approve Account Applications</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </div>
+
+        <!-- Fourth Row: Three blocks in a card deck -->
+        <div class="row mt-4">
+            <!-- Manage Pre-made Boxes Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Pre-made Boxes</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('national_manager.create_box') }}" class="btn btn-info mb-2">Add New Box</a>
+                            <a href="{{ url_for('national_manager.view_boxes') }}" class="btn btn-info mb-2">View/Edit/Delete Boxes</a>
+                            <a href="{{ url_for('national_manager.view_trigger_list') }}" class="btn btn-info mb-2">Trigger Subscription Orders</a>
                         </div>
                     </div>
                 </div>

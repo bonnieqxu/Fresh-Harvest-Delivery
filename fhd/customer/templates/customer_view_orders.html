@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-8 offset-lg-2 my-5">
             <div class="row">
                 <div class="col-12">
                     <a href="
@@ -40,7 +40,7 @@
                             {{ url_for('customer.view_order', order_id=order[0]) }}
                             {% endif %}
                             ">{{ order[0] }}</a></td>
-                        <td>{{ order[1] }}</td>
+                        <td style="width: 120px;">{{ order[1].strftime('%d-%m-%Y') if order[1] is not none }}</td>
                         <td>${{ order[2] }}</td>
                         <td>{{ order[3] }}</td>
                         <td>{{ order[4] }}</td>

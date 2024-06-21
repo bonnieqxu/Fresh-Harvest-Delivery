@@ -1,8 +1,10 @@
 from flask import Blueprint, flash, session, redirect, url_for, render_template, request
 from fhd import my_hashing
-from fhd.utilities import flash_form_errors, get_user_by_email, depots, User, get_depot_name_by_id
+from fhd.utilities import flash_form_errors, get_user_by_email, depots, User, get_depot_name_by_id, user_exists_with_email
 from fhd.auth.forms import RegistrationForm, LoginForm
 from fhd.dbconnection import getCursor
+from datetime import datetime
+import re
 
 
 auth = Blueprint("auth", __name__, template_folder="templates")
@@ -17,6 +19,7 @@ def check_password(db_password, user_password):
 
 
 def login_user(email, role_id, user_id, depot):
+    #set session variables to be used throughout 
     session['loggedin'] = True
     session['user_email'] = email
     session['user_role_id'] = role_id
@@ -27,15 +30,26 @@ def login_user(email, role_id, user_id, depot):
 # endregion
 
 # region routes
+
+
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
+    # this function handles user login.
+
+    # GET: Renders the login page.
+    # POST: Validates user credentials and logs in if valid.
+
+    # Returns:
+    # If successful login, redirects to respective dashboard.
+    # If invalid credentials, renders login page with error message.
+
     form = LoginForm()
     if request.method == 'POST':
         # Handle login form submission
         email = request.form.get('email')
         password = request.form.get('password')
+        
         # Check username and password
-
         user = get_user_by_email(email)
         if user:
             hashed_password = user[2]
@@ -73,27 +87,68 @@ def login():
 
 @auth.route("/logout")
 def logout():
-    session.pop("user_id", None)
-    session.pop("user_role_id", None)
-    session.pop("user_email", None)
-    session.pop("loggedin", None)
-    session.pop('shoppingcart', None)
-    session.pop('user_depot', None)
-    session.pop('box_contents', None)
-    session.pop('box_id', None)
+    # Logs out the current user by clearing the session.
+    session.clear() #clear all session
     return redirect(url_for("auth.login"))
 
 
 
 @auth.route("/register", methods=["GET", "POST"])
 def register():
+    # This function handles user registration.
+
+    # GET: Renders the registration page.
+    # POST: Validates user registration form and creates a new user if valid.
+
+    # Returns:
+    # If successful registration, redirects to the login page.
+    # If invalid form data, renders registration page with validation errors.
+    
     form = RegistrationForm()
     depots_list = depots()  
     form.depot_id.choices = [(depot['depot_id'], depot['depot_name']) for depot in depots_list] 
 
     if form.validate_on_submit():
 
+        # Validate email format
+        if not re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', form.email.data):
+            flash('Invalid email address', 'danger')
+            return render_template('register.html', form=form, depots=depots_list)
+
+        # Check if email already exists
+        if user_exists_with_email(form.email.data):
+            flash('Email address already in use', 'danger')
+            return render_template('register.html', form=form, depots=depots_list)
+
+        # Validate names
+        if not form.first_name.data.isalpha() or not form.last_name.data.isalpha():
+            flash('Name must contain only letters', 'danger')
+            return render_template('register.html', form=form, depots=depots_list)
+
+        # Validate phone number
+        if not form.phone.data.isdigit():
+            flash('Phone number must contain only numbers', 'danger')
+            return render_template('register.html', form=form, depots=depots_list)
+
+        # Validate age
+        dob = form.dob.data
+        today = datetime.today()
+        age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+        if age < 18:
+            flash('User must be 18 years or older', 'danger')
+            return render_template('register.html', form=form, depots=depots_list)
+
+        # Validate password
+        password_pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-]).{8,}$'
+        if not re.match(password_pattern, form.password.data):
+            flash('Password must be at least 8 characters long and include a mix of character types', 'danger')
+            return render_template('register.html', form=form, depots=depots_list)
+
+
+        # Hash the password before storing in the database
         hashed = my_hashing.hash_value(form.password.data, salt='myhashsalt')
+        
+        # Create a new user object
         new_user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data,
@@ -103,15 +158,13 @@ def register():
             phone=form.phone.data,
             dob=form.dob.data,
             depot_id=form.depot_id.data,
-            isrural = form.isrural.data
+            isrural = form.isrural.data #is rural is saved here for shipping option 
         )
-        flash("Thank you for signing up", "success")
+        flash("Thank you for signing up! Please log in.", "success")
         return redirect(url_for('auth.login'))  
 
     return render_template('register.html', form=form, depots=depots_list)
     pass
-# endregion
-
 
 
 # endregion

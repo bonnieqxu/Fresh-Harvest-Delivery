@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Local Manager Review the Box{% endblock %}
+{% block title %}Review the Box{% endblock %}
 {% block content %}
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-12">
-            <a href="{{ url_for('local_manager.add_box_content') }}"
+            <a href="{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}{{ url_for('local_manager.add_box_content') }}{% else %}{{ url_for('national_manager.add_box_content') }}{% endif %}"
             style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
-         << Add More Items</a>
+            &lt;&lt; Add More Items</a>
         </div>
     </div>
     <div class="row">
@@ -18,10 +18,10 @@
     <div class="row">
         <div class="col-12">
             {% if box_items %}
-            <form id="orderForm" method="post" action="{{ url_for('local_manager.confirm_box') }}">
+            <form id="orderForm" method="post" action="{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}{{ url_for('local_manager.confirm_box') }}{% else %}{{ url_for('national_manager.confirm_box') }}{% endif %}">
                 <table class="table table-striped table-hover text-center">
                     <thead>
-                        <tr>
+                        <tr class="table-primary">
                             <th style="width: 15%;">Product Id</th>
                             <th style="width: 15%;">Image</th>
                             <th style="width: 20%;">Name</th>
@@ -56,7 +56,7 @@
                                     data-unit-weight="{{ box_item[3] }}" onchange="updateTotalWeight()">
                             </td>
                             <td>
-                                <a href="#" onclick="confirmDelete(event, '{{ url_for('local_manager.delete_box_item', item_id=box_item[0]) }}')" class="btn btn-danger btn-sm">
+                                <a href="#" onclick="confirmDelete(event, '{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}{{ url_for('local_manager.delete_box_item', item_id=box_item[0]) }}{% else %}{{ url_for('national_manager.delete_box_item', item_id=box_item[0]) }}{% endif %}')" class="btn btn-danger btn-sm">
                                     <i class="fas fa-minus-circle"></i>
                                 </a>
                             </td>
@@ -70,7 +70,7 @@
                     </div>
                 <div class="d-flex justify-content-end" style="gap: 10px;">
                     <button type="submit" class="btn btn-primary">Confirm Box</button>
-                    <a href="#" class="btn btn-danger" onclick="confirmClear(event, '{{ url_for('local_manager.clear_box') }}')">Clear Items</a>
+                    <a href="#" class="btn btn-danger" onclick="confirmClear(event, '{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}{{ url_for('local_manager.clear_box') }}{% else %}{{ url_for('national_manager.clear_box') }}{% endif %}')">Clear Items</a>
                     </div>
                 </div>
             </form>

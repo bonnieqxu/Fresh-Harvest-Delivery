@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Credit Increase Request Details{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('national_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1 class="mb-4">Account Holder Application Details</h1>
+            <hr>
+            <h3 class="mb-3">Applicant Information</h3>
+            <div class="mb-3">
+                <p><strong>Applicant:</strong> {{ request_info[9] }}</p>
+                <p><strong>Business Name:</strong> {{ request_info[10] }}</p>
+                <p><strong>Business Address:</strong> {{ request_info[11] }}</p>
+                <p><strong>Contact Number:</strong> {{ request_info[12] }}</p>
+                <p><strong>Current Credit Limit:</strong> ${{ request_info[3] }}</p>
+            </div>
+            <hr>
+            <h3 class="mb-3">Application Details</h3>
+            <div class="mb-3">
+                <p><strong>Reason for Application:</strong> 
+                    {% if request_info[4] %}
+                        {{ request_info[4] }}
+                    {% else %}
+                    <em>Customer did not provide a reason.</em>
+                    {% endif %}
+                </p>                
+                <p><strong>Requested Credit Limit:</strong> ${{ request_info[5] }}</p>
+            </div>
+            <hr>
+            
+            <form method="POST" action="{{ url_for('national_manager.handle_credit_limit_request', request_id=request_info[0]) }}" onsubmit="return confirmSubmit()">
+               
+                <input type="hidden" name="requested_limit" value="{{ request_info[5] }}">
+
+                <div class="form-group mb-3">
+                    <label for="action">Select Action:</label>
+                    <select id="action" name="action" class="form-select" required onchange="toggleCreditLimit(this.value)">
+                        <option value="" disabled selected>Please select an action to take</option>
+                        <option value="approve_same">Approve the Requested Amount</option>
+                        <option value="approve_diff">Approve a Different Amount</option>
+                        <option value="reject">Decline and Keep the Current Limit</option>
+                    </select>
+                </div>
+
+                
+                <div id="credit-limit-section" class="form-group mb-3" style="display: none;">
+                    <label for="credit_limit">Please Enter Credit Limit:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        <input type="number" step="1" id="credit_limit" name="credit_limit" class="form-control" min="100">
+                    </div>
+                </div>
+                                
+                
+                <div class="form-group mb-3">
+                    <label for="message">Please Enter a Message (required):</label>
+                    <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+                </div>
+
+
+                
+                <div class="form-group mb-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="{{ url_for('national_manager.view_credit_limit_increase_requests') }}" class="btn btn-secondary">Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleCreditLimit(action) {
+    var creditLimitSection = document.getElementById('credit-limit-section');
+    var creditLimitInput = document.getElementById('credit_limit');
+    if (action === 'approve_diff') {
+        creditLimitSection.style.display = 'block';
+        creditLimitInput.required = true;
+    } else {
+        creditLimitSection.style.display = 'none';
+        creditLimitInput.required = false;
+        creditLimitInput.value = '';  // Clear the value if the section is hidden
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    toggleCreditLimit(document.getElementById('action').value);
+});
+
+function confirmSubmit() {
+    return confirm("Are you sure you about your decision?");
+}
+
+</script>
+{% endblock %}

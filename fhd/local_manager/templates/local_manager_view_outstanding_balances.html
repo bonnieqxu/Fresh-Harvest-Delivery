@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Monitor Outstanding Balances{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12 mb-3">
+                <a href="{{ url_for('local_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1>Monthly Account Outstanding Balances</h1>
+            <hr>
+            {% if outstanding_balances %}
+            <table class="table table-striped table-hover text-center">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Account Holder</th>
+                        <th>Credit Limit</th>
+                        <th>Amount Owning</th>
+                        <th>Due Date</th>
+                        <th>Overdue Amount</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for balance in outstanding_balances %}
+                        <tr>
+                            <td>{{ balance[1] }}</td>
+                            <td>${{ balance[2] }}</td>
+                            <!-- Checks if the current balance is negative and displays the balance as a credit if it is.-->
+                            <td>
+                                {% if balance[3] < 0 %}
+                                    ${{ -balance[3] }} (Credit)
+                                {% else %}
+                                    ${{ balance[3] }}
+                                {% endif %}
+                            </td>
+                            <td>{{ balance[4] }}</td>
+                            <td>${{ balance[5] }}</td>
+                            <td>
+                                <a href="{{ url_for('local_manager.view_balance_details', account_holder_id=balance[0]) }}" class="btn btn-info">View Details</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p>No outstanding balances found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

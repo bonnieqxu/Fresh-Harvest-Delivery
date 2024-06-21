@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 
-<div class="authentication">
+<div class="authentication" id="authentication">
     <h1 class="text-center">Log in</h1>
     <form id="login-form" action="{{ url_for('auth.login') }}" method="post" class="mt-4">
         {{ form.csrf_token }}

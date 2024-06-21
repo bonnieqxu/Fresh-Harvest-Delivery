@@ -1,6 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Staff Dashboard{% endblock %} {%
-block content %}
+{% block title %}Staff Dashboard{% endblock %} 
+{% block body_class %}
+    {% if session['user_role_id'] == 1 %}
+        customer
+    {% elif session['user_role_id'] == 2 %}
+        account-holder
+    {% elif session['user_role_id'] == 3 %}
+        staff
+    {% elif session['user_role_id'] == 4 %}
+        local-manager
+    {% elif session['user_role_id'] == 5 %}
+        national-manager
+    {% else %}
+        default
+    {% endif %}
+{% endblock %}
+{% block content %}
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h1>Welcome! {{ name }}</h1>
@@ -10,48 +25,6 @@ block content %}
     <div class="container mt-3">
         <!-- Top Row: Three blocks in a card deck -->
         <div class="row">
-            <!-- Personal Profile Management Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Profile</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-primary mb-2">Update
-                                Account</a>
-                            <!-- <a href="password-update-url" class="btn btn-secondary mb-2">Change Password</a> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manage Produce Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Product</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('staff.staff_product_list', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View/Edit Product</a>
-                            <a href="#" class="btn btn-info mb-2">Discontinue Product</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manage Inventory Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Product Type</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('staff.staff_search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Middle Row: Three blocks in a card deck -->
-        <div class="row mt-4">
             <!-- Manage Orders Block -->
             <div class="col-md-4">
                 <div class="card">
@@ -63,14 +36,26 @@ block content %}
                     </div>
                 </div>
             </div>
-
-            <!-- Manage Messages Block -->
+            <!-- Manage Inventory Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Messages</div>
+                    <div class="card-header">Manage Product Type</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="{{ url_for('staff.getMessages') }}" class="btn btn-info mb-2">Inbox /View Messages</a>
+                            <a href="{{ url_for('staff.staff_search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Manage Produce Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Product Inventory</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('staff.staff_product_list', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View/Update Product Inventory</a>
+                            <a href="{{ url_for('staff.staff_perished_product_log', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View Perished Product</a>
+                            <a href="{{ url_for('staff.staff_discontinued_products', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View Discontinued Product</a>
                         </div>
                     </div>
                 </div>

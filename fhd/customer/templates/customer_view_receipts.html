@@ -3,12 +3,12 @@
 {% block content %}
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-8 offset-lg-2 my-5">
             <div class="row">
                 <div class="col-12">
                     <a href="{{ url_for('customer.dashboard') }}"
                         style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
-                        << Dashboard</a>
+                        &lt;&lt; Dashboard</a>
                 </div>
             </div>
             <h1>My Receipts</h1>
@@ -28,7 +28,7 @@
             {% if order[6] is not none %}
                 <tr>
                     <td>{{ loop.index }}</td>
-                    <td>{{ order[1] }}</td>
+                    <td style="width: 120px;">{{ order[1].strftime('%d-%m-%Y') if order[1] is not none }}</td>
                     <td>${{ order[2] }}</td>
                     <td>
                         <a href="{{ url_for('customer.view_receipt', invoice_id=order[6]) }}">View Your Receipt</a>

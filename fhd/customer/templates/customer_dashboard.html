@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 {% block title %}Customer Dashboard{% endblock %}
+{% block body_class %}
+    {% if session['user_role_id'] == 1 %}
+        customer
+    {% elif session['user_role_id'] == 2 %}
+        account-holder
+    {% elif session['user_role_id'] == 3 %}
+        staff
+    {% elif session['user_role_id'] == 4 %}
+        local-manager
+    {% elif session['user_role_id'] == 5 %}
+        national-manager
+    {% else %}
+        default
+    {% endif %}
+{% endblock %}
 {% block content %}
 <div class="container mt-5">
     <div class="text-center mb-4">
@@ -9,19 +24,6 @@
     <div class="container mt-3">
         <!-- Top Row: Three blocks -->
         <div class="row">
-            <!-- Manage Profile and Password Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Profile</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <!-- Buttons for profile and password management -->
-                            <a href="#" class="btn btn-primary mb-2">Update Account</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- View Produce Block -->
             <div class="col-md-4">
                 <div class="card">
@@ -34,7 +36,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Subscription Block -->
             <div class="col-md-4">
                 <div class="card">
@@ -46,49 +47,30 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Bottom Row: Three blocks -->
-            <div class="row mt-4">
-                <!-- My Orders Block -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">My Orders</div>
-                        <div class="card-body">
-                            <div class="d-flex flex-column">
-                                <a href="{{ url_for('customer.view_orders') }}" class="btn btn-info mb-2">View My Orders</a>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <a href="#" class="btn btn-info mb-2">Manage My Orders</a>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <a href="{{ url_for('customer.view_receipts')}}" class="btn btn-info mb-2">View My Receipts</a>
-                            </div>
+            <!-- Account holder -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Become an Account Holder</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('customer.apply_account_holder') }}" class="btn btn-info">Fill the Form</a>
                         </div>
                     </div>
                 </div>
-                <!-- Account holder -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">Become an Account Holder</div>
-                        <div class="card-body">
-                            <div class="d-flex flex-column">
-                                <a href="{{ url_for('customer.apply_account_holder') }}" class="btn btn-info">Fill the Form</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </div>            
+        </div>
 
-                 <!-- Gift Card Block -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">Giftcards</div>
-                        <div class="card-body">
-                            <div class="d-flex flex-column">
-                                <a href="#" class="btn btn-info mb-2">Purchase Giftcards</a>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <a href="#" class="btn btn-info mb-2">Use Giftcards</a>
-                            </div>
+        <div class="row mt-4">
+            <!-- My Orders Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">My Orders</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('customer.view_orders') }}" class="btn btn-info mb-2">View/Edit My Orders</a>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('customer.view_receipts')}}" class="btn btn-info mb-2">View My Receipts</a>
                         </div>
                     </div>
                 </div>

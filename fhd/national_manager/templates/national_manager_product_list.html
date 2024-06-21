@@ -5,42 +5,50 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('national_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Product</h1>
                 <hr>
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <form method="POST" action="{{ url_for('national_manager.national_manager_product_list') }}">
-                                {{ form.hidden_tag() }}
-                                <div class="form-group">
-                                    <label for="depot">Select Depot:</label>
-                                    <select id="depot" name="depot" class="form-select">
-                                        {% if selected_depot == 0 %}
-                                            <option value="0" selected>All Depot</option>
+                        <form method="POST" action="{{ url_for('national_manager.national_manager_product_list') }}">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                <label for="depot">Select Depot:</label>
+                                <select id="depot" name="depot" class="form-select">
+                                    {% if selected_depot == 0 %}
+                                        <option value="0" selected>All Depot</option>
+                                    {% else %}
+                                        <option value="0">All Depot</option>
+                                    {% endif %}
+                                    {% for depot in depots %}
+                                        {% if depot.id == selected_depot %}
+                                            <option value="{{ depot.id }}" selected>{{ depot.name }}</option>
                                         {% else %}
-                                            <option value="0">All Depot</option>
+                                            <option value="{{ depot.id }}">{{ depot.name }}</option>
                                         {% endif %}
-                                        {% for depot in depots %}
-                                            {% if depot.id == selected_depot %}
-                                                <option value="{{ depot.id }}" selected>{{ depot.name }}</option>
-                                            {% else %}
-                                                <option value="{{ depot.id }}">{{ depot.name }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Filter by Status:</label>
-                                    <select id="status" name="status" class="form-select">
-                                        <option value="All" {% if selected_status == 'All' %}selected{% endif %}>All</option>
-                                        <option value="Available" {% if selected_status == 'Available' %}selected{% endif %}>Available</option>
-                                        <option value="Low" {% if selected_status == 'Low' %}selected{% endif %}>Low</option>
-                                        <option value="Unavailable" {% if selected_status == 'Unavailable' %}selected{% endif %}>Unavailable</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                            </form>
-                        </div>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="status">Filter by Status:</label>
+                                <select id="status" name="status" class="form-select">
+                                    <option value="All" {% if selected_status == 'All' %}selected{% endif %}>All</option>
+                                    <option value="Available" {% if selected_status == 'Available' %}selected{% endif %}>Available</option>
+                                    <option value="Low" {% if selected_status == 'Low' %}selected{% endif %}>Low</option>
+                                    <option value="Unavailable" {% if selected_status == 'Unavailable' %}selected{% endif %}>Unavailable</option>
+                                </select>
+                            </div>
+                            <div class="form-group mb-2">
+                                <label for="search">Search by Product Name:</label>
+                                <input type="text" id="search" name="search" class="form-control" value="{{ search_query }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <a href="{{ url_for('national_manager.national_manager_product_list') }}" class="btn btn-secondary">Clear Filters</a>
+                        </form>
                     </div>
                 </div>
                 <hr>

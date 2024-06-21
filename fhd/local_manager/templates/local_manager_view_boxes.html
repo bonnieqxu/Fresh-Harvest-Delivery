@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}Local Manager View Boxes{% endblock %}
+{% block title %}View Boxes{% endblock %}
 {% block content %}
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-12">
             <div class="row">
                 <div class="col-12">
-                    <a href="{{ url_for('local_manager.dashboard') }}"
+                    <a href="{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}{{ url_for('local_manager.dashboard') }}{% else %}{{ url_for('national_manager.dashboard') }}{% endif %}"
                         style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
-                        << Dashboard</a>
+                        &lt;&lt; Dashboard</a>
                 </div>
             </div>
             <h1>Weekly Boxes</h1>
@@ -23,6 +23,9 @@
                         <th>End Date</th>
                         <th>Box Size</th>
                         <th>Price</th>
+                        {% if session['user_role_id'] == 5 or session['user_role_id'] == '5' %}
+                        <th>Location</th>
+                        {% endif %}
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -30,18 +33,26 @@
                     {% for box in boxes %}
                     <tr>
                         <td>
-                            <a href="{{ url_for('local_manager.view_box', box_id=box[0]) }}?box_product_id={{ box[1] }}">
+                            <a href="
+                            {% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}
+                            {{ url_for('local_manager.view_box', box_id=box[0]) }}?box_product_id={{ box[1] }}
+                            {% else %}
+                            {{ url_for('national_manager.view_box', box_id=box[0]) }}?box_product_id={{ box[1] }}
+                            {% endif %}">
                                 {{ box[1] }}
                             </a>
                         </td>
-                        <td>{{ box[-1] }}</td>
+                        <td>{{ box[6] }}</td>
                         <td>{{ box[2] }}</td>
                         <td>{{ box[3] }}</td>
                         <td>{{ box[4] }}</td>
                         <td>${{ box[5] }}</td>
+                        {% if session['user_role_id'] == 5 or session['user_role_id'] == '5' %}
+                        <td>{{ box[7] }}</td>
+                        {% endif %}
                         <td>
-                            <a href="#" onclick="confirmDelete(event, '{{ url_for('local_manager.delete_box', box_id=box[0]) }}')" class="btn btn-danger btn-sm">
-                                <i class="fas fa-minus-circle"></i>
+                            <a href="#" onclick="confirmDelete(event, '{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}{{ url_for('local_manager.delete_box', box_id=box[0]) }}{% else %}{{ url_for('national_manager.delete_box', box_id=box[0]) }}{% endif %}')" class="btn btn-danger btn-sm">
+                                Delete
                             </a>
                         </td>
                     </tr>

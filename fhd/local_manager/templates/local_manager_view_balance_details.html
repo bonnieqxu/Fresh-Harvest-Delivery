@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Account Holder Details{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1>Account Balance and Order Information</h1>
+            <hr>
+            <p><strong>Account Holder Information</strong></p>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Business Name:</strong> {{ account_holder[2] }}</p>
+                    <p><strong>Account Holder:</strong> {{ account_holder[0] }} {{ account_holder[1] }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Business Address:</strong> {{ account_holder[3] }}</p>
+                    <p><strong>Contact Number:</strong> {{ account_holder[4] }}</p>
+                </div>
+            </div>
+            <p><strong>Account Information</strong></p>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <p><strong>Credit Limit:</strong> ${{ account_holder[5] }}</p>
+                    <p><strong>Current Balance:</strong> 
+                        {% if account_holder[6] < 0 %}
+                             ${{ -account_holder[6] }} (Credit)
+                        {% else %}
+                            ${{ account_holder[6] }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Overdue Amount:</strong> ${{ account_holder[9] }}</p>
+                    <p><strong>Payment Due Date:</strong> {{ account_holder[8] }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Remaining Balance:</strong> ${{ account_holder[7] }}</p>
+                </div>
+            </div>
+
+            <hr>
+            <h3>Purchase Records</h3>
+            <form method="get" action="">
+                <div class="form-group">
+                    <label for="month">Select Month:</label>
+                    <select id="month" name="month" class="form-select" onchange="this.form.submit()">
+                        <option value="">All</option>
+                        {% for month in months %}
+                            <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <br>
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Total Price</th>
+                        <th>Order Status</th>
+                        <th>Shipping Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for purchase in purchases %}
+                    <tr>
+                        <td>{{ purchase[0] }}</td>
+                        <td>{{ purchase[1] }}</td>
+                        <td>${{ purchase[2] }}</td>
+                        <td>{{ purchase[4] }}</td>
+                        <td>{{ purchase[5] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a href="{{ url_for('local_manager.view_outstanding_balances')}}" class="btn btn-secondary mt-3">Return</a>
+            <a href="{{ url_for('local_manager.update_balance', account_holder_id=account_holder_id) }}" class="btn btn-primary mt-3">Update Outstanding Balance</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

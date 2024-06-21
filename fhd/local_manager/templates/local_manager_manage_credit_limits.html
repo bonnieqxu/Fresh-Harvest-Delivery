@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Manage Credit Limits{% endblock %}
+{% block content %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12 mb-3">
+                <a href="{{ url_for('local_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1 class="mb-4">Manage Account Holder Credit Limits</h1>
+            <table class="table table-striped table-hover mt-3">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>ID</th>
+                        <th>Business Name</th>
+                        <th>Account Holder</th>
+                        <th>Credit Limit</th>
+                        <th>New Credit Limit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if account_holders %}
+                        {% for account_holder in account_holders %}
+                            <tr>
+                                <td class="text-center align-middle">{{ account_holder[0] }}</td> 
+                                <td class="text-center align-middle">{{ account_holder[1] }}</td>
+                                <td class="align-middle">{{ account_holder[4] }} {{ account_holder[5] }}</td>
+                                <td class="text-center align-middle">${{ account_holder[2] }}</td>
+                                <td class="text-center align-middle">
+                                    <form method="POST" action="{{ url_for('local_manager.manage_credit_limits') }}">
+                                        <input type="hidden" name="account_holder_id" value="{{ account_holder[0] }}">
+                                        <input type="number" name="new_credit_limit" class="form-control" min="0" step="1" required>
+                                </td>
+                                <td class="text-center align-middle">
+                                    <button type="submit" class="btn btn-primary mt-2">Update</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">No account holders found for your depot.</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

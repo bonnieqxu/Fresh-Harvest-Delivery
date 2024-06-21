@@ -55,7 +55,7 @@
                     <a href="{{ url_for('main.view_product', product_id=product[0]) }}">
                         <p>{{ product[1] }}</p>
                     </a>
-                    <small>{{ product[-3] }} {{ product[-2] }}</small> <!-- weight -->
+                    <small>{{ product[5] }} {{ product[6] }}</small> <!-- weight -->
                     <h4> ${{ product[2] }}</h4> <!-- price -->
 
                     {% set product_quantity = namespace(quantity=0) %}
@@ -72,7 +72,11 @@
                             <label for="quantity_{{ product[0] }}">Quantity:</label>
                             <input type="number" id="quantity_{{ product[0] }}" name="quantity_{{ product[0] }}" min="1" max="{{product[7]}}" value="{{ product_quantity.quantity }}" style="width: 3em; margin-left: 5px; margin-right: 5px;">
                         </div>
+                        {% if product[-1] == False %}
+                        <a href="#" class="btn btn-sm btn-secondary disabled" aria-disabled="true">Sold out</a>
+                        {% else %}
                         <a href="#" onclick="addToCart('{{ product[0] }}', '{{ product[7]}}');" class="btn btn-sm btn-primary">Add to cart</a>
+                        {% endif %}
                     </div>
                     {% if product_quantity.quantity > 0 %}
                     <label><h6>{{ product_quantity.quantity }} in cart</h6></label>
@@ -127,11 +131,16 @@
         }
 
         var url;
-        if ({{ session['user_role_id'] }} == 1 || {{ session['user_role_id'] }} == '1') {
+        {% if session.get('user_role_id') is not none %}
+            if ({{ session['user_role_id'] }} == 1 || {{ session['user_role_id'] }} == '1') {
+                url = "{{ url_for('customer.addItem', product_id='__product_id__') }}";
+            } else {
+                url = "{{ url_for('account_holder.addItem', product_id='__product_id__') }}";
+            }
+        {% else %}
             url = "{{ url_for('customer.addItem', product_id='__product_id__') }}";
-        } else {
-            url = "{{ url_for('account_holder.addItem', product_id='__product_id__') }}";
-        }
+        // Handle the case where user_role_id is not set
+        {% endif %}
         url = url.replace('__product_id__', product_id);
 
         // Append the quantity to the URL

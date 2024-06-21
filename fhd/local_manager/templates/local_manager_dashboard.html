@@ -1,6 +1,21 @@
 {% extends "base.html" %}
-{% block title %}Local Manager Dashboard{% endblock %} {%
-block content %}
+{% block title %}Local Manager Dashboard{% endblock %} 
+{% block body_class %}
+    {% if session['user_role_id'] == 1 %}
+        customer
+    {% elif session['user_role_id'] == 2 %}
+        account-holder
+    {% elif session['user_role_id'] == 3 %}
+        staff
+    {% elif session['user_role_id'] == 4 %}
+        local-manager
+    {% elif session['user_role_id'] == 5 %}
+        national-manager
+    {% else %}
+        default
+    {% endif %}
+{% endblock %}
+{% block content %}
 <div class="container mt-5">
     <div class="text-center mb-4">
         <h1>Welcome! {{ name }}</h1>
@@ -10,48 +25,6 @@ block content %}
     <div class="container mt-3">
         <!-- Top Row: Three blocks in a card deck -->
         <div class="row">
-            <!-- Personal Profile Management Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Profile</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-primary mb-2">Update
-                                Account</a>
-                            <!-- <a href="password-update-url" class="btn btn-secondary mb-2">Change Password</a> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        
-        <!-- Manage Produce Block -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">Manage Product</div>
-                <div class="card-body">
-                    <div class="d-flex flex-column">
-                        <a href="{{ url_for('local_manager.local_manager_product_list', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View/Edit Product</a>
-                        <a href="#" class="btn btn-info mb-2">Discontinue Product</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-            <!-- Manage Inventory Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Product Type</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('local_manager.search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Middle Row: Three blocks in a card deck -->
-        <div class="row mt-4">
             <!-- Manage Orders Block -->
             <div class="col-md-4">
                 <div class="card">
@@ -63,55 +36,13 @@ block content %}
                     </div>
                 </div>
             </div>
-
-            <!-- Manage Messages Block -->
+            <!-- Manage Monthly Account Outstanding Balances Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Messages</div>
+                    <div class="card-header">Manage Monthly Account Outstanding Balances</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="{{ url_for('local_manager.getMessages') }}" class="btn btn-info mb-2">Inbox /View Messages</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Manage Pre-made Boxes Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Pre-made Boxes</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="{{ url_for('local_manager.create_box') }}" class="btn btn-info mb-2">Add New Box</a>
-                            <a href="{{ url_for('local_manager.view_boxes') }}" class="btn btn-info mb-2">View/Edit/Delete Boxes</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Third Row: Three blocks in a card deck -->
-        <div class="row mt-4">
-            <!-- Manage Promotions Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage Promotions</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Update Promotions</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--Manage News Block-->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Manage News</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a New News</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit News</a>
-                            <a href="#" class="btn btn-info mb-2">Delete News</a>
+                            <a href="{{ url_for('local_manager.view_outstanding_balances')}}" class="btn btn-info mb-2">View Monthly Account Outstanding Balances</a>
                         </div>
                     </div>
                 </div>
@@ -127,31 +58,18 @@ block content %}
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Fourth Row: Three blocks in a card deck -->
+        </div>        
+        <!-- Middle Row: Three blocks in a card deck -->
         <div class="row mt-4">
-            <!-- Manage Staff Block -->
+            <!-- Manage Produce Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Staff</div>
+                    <div class="card-header">Manage Product</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Add a New Staff</a>
-                            <a href="#" class="btn btn-info mb-2">View/Edit Staff</a>
-                            <a href="#" class="btn btn-info mb-2">Delete Staff</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Reports and Analysis Block -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">Reports and Analysis</div>
-                    <div class="card-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">Revenue Report</a>
-                            <a href="#" class="btn btn-info mb-2">Sales Report</a>
+                            <a href="{{ url_for('local_manager.local_manager_product_list', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View/Edit Product</a>
+                            <a href="{{ url_for('local_manager.local_manager_perished_product_log', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View Perished Product</a>
+                            <a href="{{ url_for('local_manager.local_manager_discontinued_products', depot_id=session['user_depot']) }}" class="btn btn-info mb-2">View Discontinued Product</a>
                         </div>
                     </div>
                 </div>
@@ -162,24 +80,35 @@ block content %}
                     <div class="card-header">Manage Credit Limit</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View/Set Account Holder Credit Limit</a>
-                            <a href="#" class="btn btn-info mb-2">Update Account Holder Total Credit Limit</a>
-                            <a href="#" class="btn btn-info mb-2">Approve/Reject Credit Limit Change Request</a>
+                            <a href="{{ url_for('local_manager.manage_credit_limits')}}" class="btn btn-info mb-2">View/Set Account Holder Credit Limit</a>
+                            <a href="{{ url_for('local_manager.view_credit_limit_increase_requests')}}" class="btn btn-info mb-2">Approve/Reject Credit Limit Change Request</a>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <!-- Manage Pre-made Boxes Block -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Manage Pre-made Boxes</div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column">
+                            <a href="{{ url_for('local_manager.create_box') }}" class="btn btn-info mb-2">Add New Box</a>
+                            <a href="{{ url_for('local_manager.view_boxes') }}" class="btn btn-info mb-2">View/Edit/Delete Boxes</a>
+                            <a href="{{ url_for('local_manager.view_trigger_list') }}" class="btn btn-info mb-2">Trigger Subscription Orders</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Fifth Row: Three blocks in a card deck -->
+        <!-- Third Row: Three blocks in a card deck -->
         <div class="row mt-4">
-            <!-- Manage Monthly Account Outstanding Balances Block -->
+            <!-- Manage Inventory Block -->
             <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Manage Monthly Account Outstanding Balances</div>
+                    <div class="card-header">Manage Product Type</div>
                     <div class="card-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn btn-info mb-2">View Monthly Account Outstanding Balances</a>
+                            <a href="{{ url_for('local_manager.search_product_type') }}" class="btn btn-info mb-2">Add/View/Edit/Delete Product Type</a>
                         </div>
                     </div>
                 </div>

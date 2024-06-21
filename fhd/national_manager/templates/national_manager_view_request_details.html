@@ -4,6 +4,11 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('national_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1 class="mb-4">Account Holder Application Details</h1>
             <hr>
             <h3 class="mb-3">Applicant Information</h3>
@@ -20,7 +25,7 @@
                 <!-- Action Dropdown -->
                 <div class="form-group mb-3">
                     <label for="action">Select Action:</label>
-                    <select id="action" name="action" class="form-control" required onchange="toggleCreditLimit(this.value)">
+                    <select id="action" name="action" class="form-select" required onchange="toggleCreditLimit(this.value)">
                         <option value="" disabled selected>Approve/Reject</option>
                         <option value="approve">Approve</option>
                         <option value="reject">Reject</option>

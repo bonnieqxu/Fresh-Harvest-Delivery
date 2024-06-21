@@ -4,6 +4,11 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('national_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Edit Shipping Option</h1>
             <hr>
             <form method="POST" action="{{ url_for('national_manager.edit_shipping_option', shipping_option_id=shipping_option_id) }}">
@@ -16,16 +21,9 @@
                     {% endfor %}
                 </div>
                 <div class="form-group mb-3">
-                    {{ form.price.label }}<span style="color:red;">*</span>
+                    {{ form.price.label }} ($) <span style="color:red;">*</span>
                     {{ form.price(class="form-control") }}
                     {% for error in form.price.errors %}
-                        <small class="form-text text-danger">{{ error }}</small>
-                    {% endfor %}
-                </div>
-                <div class="form-group mb-3">
-                    {{ form.status.label }}<span style="color:red;">*</span>
-                    {{ form.status(class="form-control") }}
-                    {% for error in form.status.errors %}
                         <small class="form-text text-danger">{{ error }}</small>
                     {% endfor %}
                 </div>

@@ -49,7 +49,7 @@ class RegistrationForm(FlaskForm):
                                                                        DataRequired("Data is required!"),
                                                                        EqualTo('password', message="Passwords must match!")])
     address = StringField(label='Address', validators=[DataRequired()])
-    phone = StringField(label='Phone')
+    phone = StringField(label='Phone', validators=[DataRequired()])
     dob = DateField(label='Date of Birth', format='%Y-%m-%d', validators=[DataRequired()])
     depot_id = SelectField(label='Depot', choices=[], validators=[DataRequired()])
     isrural = BooleanField('Are you located more than 20km from your depot?')

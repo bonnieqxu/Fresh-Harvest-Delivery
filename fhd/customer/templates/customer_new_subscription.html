@@ -4,6 +4,11 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('customer.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Add New Subscription</h1>
             <hr>
             <form method="POST" action="{{ url_for('customer.add_new_subscription') }}" enctype="multipart/form-data">

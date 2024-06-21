@@ -6,103 +6,107 @@
         <a class="nav-link text-white" href="{{ url_for('auth.register') }}">Sign Up</a>
     </div>
 </nav>
-<div class="authentication">
-    <h1 class="text-center">Sign up</h1>
-    <form id="RegistrationForm" action="{{ url_for('auth.register') }}" method="post" autocomplete="off" class="mt-4">
-        {{ form.csrf_token }}
-        <div class="form-group">
-            <label for="email">Email Address{% if form.email.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.email(class="form-control", required=True) }}
-            {% for error in form.email.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <h1 class="text-center">Sign up</h1>
+            <form id="RegistrationForm" action="{{ url_for('auth.register') }}" method="post" autocomplete="off" class="mt-4">
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    <label for="email">Email Address{% if form.email.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.email(class="form-control", required=True) }}
+                    {% for error in form.email.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <!-- Other form fields... -->
+                <div class="form-group">
+                    <label for="password">Password (Mix of uppercase letter, lowercase letter, special characters and numbers){% if form.password.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.password(class="form-control", required=True) }}
+                    {% for error in form.password.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password{% if form.confirm_password.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.confirm_password(class="form-control", required=True) }}
+                    {% for error in form.confirm_password.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="first_name">First Name{% if form.first_name.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.first_name(class="form-control", required=True) }}
+                    {% for error in form.first_name.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name{% if form.last_name.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.last_name(class="form-control", required=True) }}
+                    {% for error in form.last_name.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="address">Address{% if form.address.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.address(class="form-control", required=True) }}
+                    {% for error in form.address.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    {{ form.phone(class="form-control") }}
+                    {% for error in form.phone.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth{% if form.dob.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    {{ form.dob(class="form-control", required=True) }}
+                    {% for error in form.dob.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="depot_id">Depot{% if form.depot_id.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
+                    <select id="depot_id" name="depot_id" class="form-select" required>
+                        <option value="" disabled selected>Please Select Your Local Depot</option>
+                        <!-- Populate options dynamically from your database -->
+                        {% for depot in depots %}
+                            <option value="{{ depot.depot_id }}">{{ depot.depot_name }}</option>
+                        {% endfor %}
+                    </select>
+                    {% for error in form.depot_id.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    {{ form.isrural.label }}
+                    {{ form.isrural }}
+                    {% for error in form.isrural.errors %}
+                        <small class="form-text text-danger">{{ error }}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-block mt-3 login-btn">Sign Up</button>
+                    <a type="button" class="btn btn-secondary btn-block mt-3 login-btn" href="{{ url_for('main.home') }}">Cancel</a>
+                </div>
+            </form>
+            <div class="msg" style="color: red;">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {{ msg }}
+            </div>
         </div>
-        <!-- Other form fields... -->
-        <div class="form-group">
-            <label for="password">Password{% if form.password.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.password(class="form-control", required=True) }}
-            {% for error in form.password.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="confirm_password">Confirm Password{% if form.confirm_password.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.confirm_password(class="form-control", required=True) }}
-            {% for error in form.confirm_password.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="first_name">First Name{% if form.first_name.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.first_name(class="form-control", required=True) }}
-            {% for error in form.first_name.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="last_name">Last Name{% if form.last_name.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.last_name(class="form-control", required=True) }}
-            {% for error in form.last_name.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="address">Address{% if form.address.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.address(class="form-control", required=True) }}
-            {% for error in form.address.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            {{ form.phone(class="form-control") }}
-            {% for error in form.phone.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="dob">Date of Birth{% if form.dob.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            {{ form.dob(class="form-control", required=True) }}
-            {% for error in form.dob.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="depot_id">Depot{% if form.depot_id.flags.required %}<span style="color:red;">*</span>{% endif %}</label>
-            <select id="depot_id" name="depot_id" class="form-select" required>
-                <option value="" disabled selected>Please Select Your Local Depot</option>
-                <!-- Populate options dynamically from your database -->
-                {% for depot in depots %}
-                    <option value="{{ depot.depot_id }}">{{ depot.depot_name }}</option>
-                {% endfor %}
-            </select>
-            {% for error in form.depot_id.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.isrural.label }}
-            {{ form.isrural }}
-            {% for error in form.isrural.errors %}
-                <small class="form-text text-danger">{{ error }}</small>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success btn-block mt-3 login-btn">Sign Up</button>
-            <a type="button" class="btn btn-secondary btn-block mt-3 login-btn" href="{{ url_for('main.home') }}">Cancel</a>
-        </div>
-    </form>
-    <div class="msg" style="color: red;">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {{ msg }}
     </div>
 </div>
 

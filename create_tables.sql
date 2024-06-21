@@ -36,6 +36,7 @@ CREATE TABLE user_profile (
     address VARCHAR(255),
     phone_number VARCHAR(20) NOT NULL,
     date_of_birth DATE NOT NULL,
+    is_rural boolean DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE
@@ -54,6 +55,7 @@ CREATE TABLE account_holder (
 	business_phone VARCHAR(20) NOT NULL,
     user_id INT NOT NULL,
     credit_account_id INT NOT NULL,
+    isApproved BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES user(user_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
@@ -121,35 +123,66 @@ CREATE TABLE product (
 	ON DELETE CASCADE
 );
 
-CREATE TABLE box_subscription (
-    box_subscription_id INT AUTO_INCREMENT PRIMARY KEY,
-    frequency ENUM('weekly', 'fortnightly', 'monthly') NOT NULL,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE
+
+CREATE TABLE box_category (
+    box_category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category ENUM('Fruits', 'Vegetables', 'Mixed') NOT NULL
 );
 
 CREATE TABLE box_size (
     box_size_id INT AUTO_INCREMENT PRIMARY KEY,
-    size_name ENUM('small', 'medium', 'large') UNIQUE NOT NULL,
-    max_num INT NOT NULL,
+    size_name ENUM('Small', 'Medium', 'Large') UNIQUE NOT NULL,
 	price DECIMAL(10,2) NOT NULL,
     description VARCHAR(255)
+);
+
+CREATE TABLE box_frequency (
+    box_frequency_id INT AUTO_INCREMENT PRIMARY KEY,
+    frequency ENUM('Weekly', 'Fortnightly', 'Monthly') NOT NULL
 );
 
 CREATE TABLE box (
     box_id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     box_size_id INT NOT NULL,
-    box_subscription_id INT,  -- Optional link to a subscription plan, NULL if no subscription is associated
+    box_start_date DATE NOT NULL,
+    box_end_date DATE NOT NULL,
+    box_category_id INT NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (product_id) REFERENCES product(product_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
-    FOREIGN KEY (box_size_id) REFERENCES box_size(box_size_id)
+    FOREIGN KEY (box_category_id) REFERENCES box_category(box_category_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
-    FOREIGN KEY (box_subscription_id) REFERENCES box_subscription(box_subscription_id)
+    FOREIGN KEY (box_size_id) REFERENCES box_size(box_size_id)
 	ON UPDATE CASCADE
-	ON DELETE SET NULL  -- Set to NULL if the subscription is deleted
+	ON DELETE CASCADE
+);
+
+CREATE TABLE user_box_subscription (
+    user_box_subscription_id INT AUTO_INCREMENT PRIMARY KEY,
+    box_frequency_id INT NOT NULL,
+    subscription_quantity INT NOT NULL,
+    sent_quantity INT NOT NULL,
+    user_id INT NOT NULL,
+    box_category_id INT NOT NULL,
+    box_size_id INT NOT NULL,
+    subscription_date DATE NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    last_order_date DATE NULL,
+    FOREIGN KEY (box_frequency_id) REFERENCES box_frequency(box_frequency_id)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES user(user_id)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+    FOREIGN KEY (box_category_id) REFERENCES box_category(box_category_id)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE,
+    FOREIGN KEY (box_size_id) REFERENCES box_size(box_size_id)
+	ON UPDATE CASCADE
+	ON DELETE CASCADE
 );
 
 CREATE TABLE box_content (
@@ -183,8 +216,10 @@ CREATE TABLE order_hdr (
     user_id INT NOT NULL,
     order_date DATE NOT NULL,
     total_price DECIMAL(10,2) NOT NULL,
-    status_id INT NOT NULL,
+    status_id INT NOT NULL, -- 
     shipping_option_id INT NOT NULL, 
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+	purpose ENUM('subscription_payment', 'subscription_order', 'order') NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user(user_id)
     ON UPDATE CASCADE
     ON DELETE CASCADE,
@@ -269,6 +304,7 @@ CREATE TABLE invoice (
     gst_amount DECIMAL(10,2) NOT NULL,
     total_amount DECIMAL(10,2) NOT NULL,
     gst_rate_id INT NOT NULL,
+    shipping_fee DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (order_hdr_id) REFERENCES order_hdr(order_hdr_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
@@ -354,7 +390,7 @@ CREATE TABLE message (
     message_status_id INT NOT NULL,
     message_category_id INT NOT NULL,
     depot_id INT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(user_id)
+    FOREIGN KEY (sender_user_id) REFERENCES user(user_id)
 	ON UPDATE CASCADE
 	ON DELETE CASCADE,
     FOREIGN KEY (message_status_id) REFERENCES message_status(message_status_id)
@@ -381,4 +417,33 @@ CREATE TABLE news (
     content TEXT NOT NULL,
     posted_date DATE NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT TRUE 
+);
+
+CREATE TABLE credit_limit_change_request (
+    request_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+	depot_id INT NOT NULL,
+    current_limit DECIMAL(10, 2) NOT NULL,
+    reason VARCHAR(255),
+    requested_limit DECIMAL(10, 2) NOT NULL,
+    approved_limit DECIMAL(10, 2),
+    is_actioned BOOLEAN DEFAULT FALSE,
+    requested_date DATE NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (depot_id) REFERENCES depot(depot_id)
+);
+
+CREATE TABLE perished_product_log (
+    log_id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    units_removed INTEGER NOT NULL,
+    removal_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE discontinued_products (
+    id SERIAL PRIMARY KEY,
+    product_id INT,
+    product_name VARCHAR(255),
+    discontinued_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

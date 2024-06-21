@@ -25,6 +25,7 @@
                     <a href="javascript:history.back()" class="btn btn-sm btn-danger">Cancel</a>
                 </div>
                 <input type="hidden" name="message_category" value="{{ message[0][6] }}">
+                <input type="hidden" name="original_message" value="{{ message[0][3] }}">
                 <input type="hidden" name="sender_id" value="{{ message[0][1] }}">
             </form>
         </div>

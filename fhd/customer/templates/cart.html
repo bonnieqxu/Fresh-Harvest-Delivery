@@ -9,6 +9,16 @@
             window.location.href = deleteUrl;
         }
     }
+
+    function confirmCheckout(grandtotal, role, checkoutUrl) {
+        if (role == 2 || role == '2') {
+        if (confirm("$" + grandtotal + " will be deducted from your credit. Are you sure you want to proceed?")) {
+            window.location.href = checkoutUrl;
+        }
+        } else {
+            window.location.href = checkoutUrl;
+        }
+    }
 </script>
 
 <div class="container content" style="flex: 1 0 auto;">
@@ -23,7 +33,7 @@
                     {{ url_for('customer.view_depot_products') }}
                     {% endif %}"
                         style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
-                        << Continue Shopping</a>
+                        &lt;&lt; Continue Shopping</a>
                 </div>
             </div>
             <h1>Shopping Cart</h1>
@@ -87,13 +97,13 @@
                         <h6>Shipping Fee: ${{shipping_fee}} </h6>
                         <h5>Grand Total: ${{grandtotal}} (inclusive of ${{tax}} GST)</h5>
                     </td>
-                    <td><a href="
+                    <td><a href="#" onclick="confirmCheckout('{{grandtotal}}', '{{ session['user_role_id'] }}', 
                         {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
-                            {{ url_for('account_holder.checkout') }}
+                            '{{ url_for('account_holder.checkout') }}'
                         {% else %}
-                            {{ url_for('customer.checkout') }}
+                            '{{ url_for('customer.checkout') }}'
                         {% endif %}
-                        " id="checkoutButton" class="btn btn-sm btn-primary float-right">Checkout</a></td>
+                        )" id="checkoutButton" class="btn btn-sm btn-primary float-right">Checkout</a></td>
                     <td><a href="#" onclick="confirmDelete(
                         {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
                             '{{ url_for('account_holder.clearcart') }}'

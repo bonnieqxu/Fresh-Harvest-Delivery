@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Trigger Subscription Orders{% endblock %}
+{% block content %}
+
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('national_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1>Trigger Subscription Orders</h1>
+            <hr>
+                  <br>
+                  <form method="POST" action="{{ url_for('national_manager.create_subcription_orders') }}" >
+                      <div class="row">
+                        <div class="col-12">
+                            <table class="table table-striped table-hover">
+                                <tr class="table-primary">
+                                          <th>Depot</th>
+                                          <th>Customer</th>
+                                          <th>Frequency</th>
+                                          <th>Category</th>
+                                          <th>Box Size</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody> <!-- Add tbody tag for table body -->
+                                        {% if subscriptions and subscriptions is not none %}
+                                            {% for subscription in subscriptions %}
+                                                <tr>
+                                                    <td>{{ subscription[0] if subscription[0] is not none }}</td>
+                                                    <td>{{ subscription[7] if subscription[7] is not none }} {{ subscription[8] if subscription[8] is not none }}</td>
+                                                    <td>{{ subscription[3] if subscription[3] is not none }}</td>
+                                                    <td>{{ subscription[4] if subscription[4] is not none }}</td>
+                                                    <td>{{ subscription[5] if subscription[5] is not none }}</td>
+                                                     </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="7"> <!-- Use colspan to make the cell span across all columns -->
+                                                    <div class="alert alert-info" role="alert">
+                                                        There is no subscription orders to be triggered.
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                                <div class="form-group mb-3">
+                                    {% if subscriptions and subscriptions is not none %}
+                                    <button type="submit"  class="btn btn-primary btn-sm">Trigger Order</button>
+                                    {% endif %}
+                                    <a href="{{url_for('national_manager.dashboard')}}" class="btn btn-sm btn-primary">Back</a>
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                  </div>
+                          
+        </div>
+    </div>
+</div>
+
+{% endblock %}

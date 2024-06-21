@@ -4,9 +4,19 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12 mb-3">
+                <a href="{{ url_for('local_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Add New Box</h1>
             <hr>
-            <form method="POST" action="{{ url_for('local_manager.create_box') }}" enctype="multipart/form-data">
+            <form method="POST" action="{% if session['user_role_id'] == 4 or session['user_role_id'] == '4' %}
+                                        {{ url_for('local_manager.create_box') }}
+                                        {% else %}
+                                        {{ url_for('national_manager.create_box') }}
+                                        {% endif %}"
+            enctype="multipart/form-data">
                 {{ form.csrf_token }}
                 <div class="form-group mb-3">
                     {{ form.box_name.label }}<span style="color:red;">*</span>
@@ -21,6 +31,10 @@
                     {{ form.box_size(class="form-select") }}
                 </div>
                 <div class="form-group mb-3">
+                    {{ form.box_category.label }}<span style="color:red;">*</span>
+                    {{ form.box_category(class="form-select") }}
+                </div>
+                <div class="form-group mb-3">
                     {{ form.box_description.label }}
                     {{ form.box_description(class="form-control") }}
                 </div>
@@ -32,6 +46,12 @@
                     {{ form.box_image.label }}
                     {{ form.box_image(class="form-control") }}
                 </div>
+                {% if session['user_role_id'] == 5 or session['user_role_id'] == '5' %}
+                <div class="form-group mb-3">
+                    {{ form.box_depot.label }}
+                    {{ form.box_depot(class="form-select") }}
+                </div>
+                {% endif %}
                 <div class="form-group mb-3">
                     <button type="submit" class="btn btn-primary btn-sm">Next: choose box items</button>
                     <a href="javascript:history.back()" class="btn btn-sm btn-danger">Cancel</a>

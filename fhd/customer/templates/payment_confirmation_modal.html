@@ -9,7 +9,9 @@
     <div class="modal-content">
         <h3><strong> Thank You For Shopping with Us! </strong></h3>
         <hr>
-        {% if session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
+        {% if subscription %}
+        <h5> Great news! Your subscription is now active. Head over to 'Manage My Subscription' to explore your options. </h5>
+        {% elif session['user_role_id'] == 2 or session['user_role_id'] == '2' %}
         <h5> Your order has been confirmed and the amount has been deducted from your credit. You will receive a notification once your order is dispatched. </h5>
         {% else %}
         <h5> Your order is confirmed. You will receive a notification once your order is dispatched. </h5>

@@ -97,17 +97,18 @@ INSERT INTO credit_account (credit_limit, current_balance) VALUES
 (1500.00, 0.00);
 
 -- Populate account holder table with real street names and local phone numbers
-INSERT INTO account_holder (business_name, business_address, business_phone, user_id, credit_account_id) VALUES 
-('Fruit Express', '123 Cashel St, Christchurch', '0212233445', 22, 1),       -- Christchurch account holder 1
-('New World', '456 Colombo St, Christchurch', '036562233', 23, 2),          -- Christchurch account holder 2
-('Fruit Express', '789 Dee St, Invercargill', '0274455667', 24, 3),                -- Invercargill account holder 1
-('Fresh World', '101 Esk St, Invercargill', '0275566778', 25, 4),                            -- Invercargill account holder 2
-('Fresh World', '222 Lambton Quay, Wellington', '042255636', 26, 5),            -- Wellington account holder 1
-('Fresh World', '333 Cuba St, Wellington', '0217788990', 27, 5),                   -- Wellington account holder 2
-('Fresh World', '444 Victoria St, Hamilton', '072255464', 28, 7),          -- Hamilton account holder 1
-('New World', '555 Hood St, Hamilton', '0219900112', 29, 8),              -- Hamilton account holder 2
-('Fruit Express', '666 Queen St, Auckland', '093032266', 30, 9),       -- Auckland account holder 1
-('New World', '777 Ponsonby Rd, Auckland', '096365566', 31, 10);                       -- Auckland account holder 2
+INSERT INTO account_holder (business_name, business_address, business_phone, user_id, credit_account_id, isApproved) VALUES 
+('Fruit Express', '123 Cashel St, Christchurch', '0212233445', 22, 1, TRUE),       -- Christchurch account holder 1
+('New World', '456 Colombo St, Christchurch', '036562233', 23, 2, TRUE),          -- Christchurch account holder 2
+('Fruit Express', '789 Dee St, Invercargill', '0274455667', 24, 3, TRUE),                -- Invercargill account holder 1
+('Fresh World', '101 Esk St, Invercargill', '0275566778', 25, 4, TRUE),                            -- Invercargill account holder 2
+('Fresh World', '222 Lambton Quay, Wellington', '042255636', 26, 5, TRUE),            -- Wellington account holder 1
+('Fresh World', '333 Cuba St, Wellington', '0217788990', 27, 6, TRUE),                   -- Wellington account holder 2
+('Fresh World', '444 Victoria St, Hamilton', '072255464', 28, 7, TRUE),          -- Hamilton account holder 1
+('New World', '555 Hood St, Hamilton', '0219900112', 29, 8, TRUE),              -- Hamilton account holder 2
+('Fruit Express', '666 Queen St, Auckland', '093032266', 30, 9, TRUE),       -- Auckland account holder 1
+('New World', '777 Ponsonby Rd, Auckland', '096365566', 31, 10, TRUE);                          -- Auckland account holder 2
+    
     
 INSERT INTO promotion_type (description, discount_rate, start_date, end_date, is_active) VALUES 
 ('Friend and Family Discount', 0.15, '2024-05-01', '2023-04-30', TRUE),
@@ -147,19 +148,6 @@ INSERT INTO product_category (category_name) VALUES
 -- Populate product type 
 -- Fruits
 INSERT INTO product_type (product_type_name, product_weight_id, description, category_id) VALUES
--- premade box
--- Vegetable Boxes
-('Veggie Delight Box - Small', 6, 'A small box containing up to 5 kg of fresh vegetables, tailored for individuals or small families.', 7),
-('Veggie Delight Box - Medium', 7, 'A medium box containing up to 10 kg of a variety of fresh vegetables, perfect for medium-sized families.',  7),
-('Veggie Delight Box - Large',  8, 'A large box containing up to 15 kg of assorted fresh vegetables, ideal for large families or gatherings.', 7),
--- Fruit Boxes
-('Fruit Blast Box - Small', 6, 'A small box containing up to 5 kg of seasonal fruits, curated to provide a delightful mix.',  7),
-('Fruit Blast Box - Medium', 7, 'A medium box containing up to 10 kg of the finest seasonal fruits, ensuring variety and taste.', 7),
-('Fruit Blast Box - Large', 8, 'A large box containing up to 15 kg of premium, seasonal fruits, great for fruit lovers and large gatherings.', 7),    
--- Mixed Fruit and Veggie Boxes   
-('Mixed Harvest Box - Small', 6, 'A small box maxed out with up to 5 kg of a balanced mix of fruits and vegetables, ideal for individuals or small families.', 7),
-('Mixed Harvest Box - Medium',  7, 'A medium box maxed out with up to 10 kg of a generous assortment of fruits and vegetables, perfect for medium-sized families.', 7),
-('Mixed Harvest Box - Large', 8, 'A large box filled to the brim with up to 15 kg of a diverse range of fruits and vegetables, great for large families or gatherings.', 7), 
 -- Fruits
 ('Apple', 4, 'Fresh red apples, sold in 1 kg bags.', 1),
 ('Banana', 4, 'Organic bananas, sold in 1 kg batches.', 1),
@@ -238,466 +226,376 @@ INSERT INTO product_type (product_type_name, product_weight_id, description, cat
     
 
 -- Christchurch Depot (depot_id = 1)
-INSERT INTO product (orig_price, stock_quantity, depot_id, product_type_id, promotion_type_id) VALUES
-(19.99, 150, 1, 1, NULL),   -- Veggie Delight Box - Small
-(39.99, 180, 1, 2, NULL),   -- Veggie Delight Box - Medium
-(59.99, 100, 1, 3, NULL),   -- Veggie Delight Box - Large
-(19.99, 120, 1, 4, NULL),   -- Fruit Blast Box - Small
-(39.99, 130, 1, 5, NULL),   -- Fruit Blast Box - Medium
-(59.99, 200, 1, 6, NULL),   -- Fruit Blast Box - Large
-(19.99, 150, 1, 7, NULL),   -- Mixed Harvest Box - Small
-(39.99, 160, 1, 8, NULL),   -- Mixed Harvest Box - Medium
-(59.99, 140, 1, 9, NULL),   -- Mixed Harvest Box - Large
-(2.55, 150, 1, 10, NULL),   -- Apple
-(3.10, 80, 1, 11, NULL),    -- Banana
-(2.99, 90, 1, 12, NULL),    -- Orange
-(2.65, 90, 1, 13, NULL),    -- Kiwi
-(2.30, 100, 1, 14, NULL),   -- Blueberry
-(5.25, 85, 1, 15, NULL),    -- Strawberry
-(3.75, 95, 1, 16, NULL),    -- Pear
-(7.99, 90, 1, 17, NULL),    -- Mango
-(7.75, 110, 1, 18, NULL),   -- Grapes
-(8.50, 150, 1, 19, NULL),   -- Cherry
-(1.50, 120, 1, 20, NULL),   -- Potato
-(1.90, 140, 1, 21, NULL),   -- Carrot
-(2.55, 85, 1, 22, NULL),    -- Tomato
-(1.85, 90, 1, 23, NULL),    -- Cucumber
-(2.00, 100, 1, 24, NULL),   -- Pepper
-(8.25, 95, 1, 25, NULL),    -- Broccoli
-(6.50, 110, 1, 26, NULL),   -- Lettuce
-(7.90, 180, 1, 27, NULL),   -- Mushroom
-(24.95, 150, 1, 28, NULL),  -- Spinach
-(18.99, 160, 1, 29, NULL),  -- Onion
-(19.99, 120, 1, 30, NULL),  -- Basil
-(6.50, 85, 1, 31, NULL),    -- Mint
-(8.15, 150, 1, 32, NULL),   -- Parsley
-(8.25, 120, 1, 33, NULL),   -- Rosemary
-(6.50, 110, 1, 34, NULL),   -- Thyme
-(7.90, 200, 1, 35, NULL),   -- Oregano
-(24.95, 120, 1, 36, NULL),  -- Cilantro
-(18.99, 160, 1, 37, NULL),  -- Sage
-(19.99, 120, 1, 38, NULL),  -- Dill
-(6.50, 85, 1, 39, NULL),    -- Chives
-(8.15, 150, 1, 40, NULL),   -- Mixed Salad
-(8.25, 120, 1, 41, NULL),   -- Caesar Salad
-(6.50, 110, 1, 42, NULL),   -- Greek Salad
-(7.90, 200, 1, 43, NULL),   -- Caprese
-(24.95, 120, 1, 44, NULL),  -- Arugula Salad
-(18.99, 160, 1, 45, NULL),  -- Kale Salad
-(19.99, 120, 1, 46, NULL),  -- Spinach Salad
-(6.50, 85, 1, 47, NULL),    -- Cobb Salad
-(8.15, 150, 1, 48, NULL),   -- Asian Salad
-(8.25, 120, 1, 49, NULL),   -- Fruit Salad
-(12.99, 200, 1, 50, NULL),  -- Jumbo Cage-Free Eggs - Half Dozen
-(10.99, 180, 1, 51, NULL),  -- Large Cage-Free Eggs - Half Dozen
-(8.99, 150, 1, 52, NULL),   -- Standard Cage-Free Eggs - Half Dozen
-(9.99, 160, 1, 53, NULL),   -- Mixed Grade Cage-Free Eggs - Half Dozen
-(13.99, 150, 1, 58, NULL),  -- Jumbo Cage-Free Eggs
-(11.99, 140, 1, 59, NULL),  -- Large Cage-Free Eggs
-(9.49, 130, 1, 60, NULL),   -- Standard Cage-Free Eggs
-(10.49, 120, 1, 61, NULL),  -- Mixed Grade Cage-Free Eggs
-(30.99, 110, 1, 66, NULL),  -- Manuka Honey
-(15.99, 100, 1, 67, NULL),  -- Clover Honey
-(17.99, 90, 1, 68, NULL),   -- Wildflower Honey
-(18.99, 85, 1, 69, NULL),   -- Kamahi Honey
-(16.99, 80, 1, 70, NULL),   -- Beechwood Honeydew
+INSERT INTO product (orig_price, stock_quantity, depot_id, product_type_id, promotion_type_id, is_active) VALUES
+(2.55, 150, 1, 1, NULL, TRUE),   -- Apple
+(3.10, 80, 1, 2, NULL, TRUE),    -- Banana
+(2.99, 90, 1, 3, NULL, TRUE),    -- Orange
+(2.65, 90, 1, 4, NULL, TRUE),    -- Kiwi
+(2.30, 100, 1, 5, NULL, TRUE),   -- Blueberry
+(5.25, 85, 1, 6, NULL, TRUE),    -- Strawberry
+(3.75, 95, 1, 7, NULL, TRUE),    -- Pear
+(7.99, 90, 1, 8, NULL, TRUE),    -- Mango
+(7.75, 110, 1, 9, NULL, TRUE),   -- Grapes
+(8.50, 150, 1, 10, NULL, TRUE),   -- Cherry
+(1.50, 120, 1, 11, NULL, TRUE),   -- Potato
+(1.90, 140, 1, 12, NULL, TRUE),   -- Carrot
+(2.55, 85, 1, 13, NULL, TRUE),    -- Tomato
+(1.85, 90, 1, 14, NULL, TRUE),    -- Cucumber
+(2.00, 100, 1, 15, NULL, TRUE),   -- Pepper
+(8.25, 95, 1, 16, NULL,TRUE),    -- Broccoli
+(6.50, 110, 1, 17, NULL,TRUE),   -- Lettuce
+(7.90, 180, 1, 18, NULL, TRUE),   -- Mushroom
+(24.95, 150, 1, 19, NULL, TRUE),  -- Spinach
+(18.99, 160, 1, 20, NULL, TRUE),  -- Onion
+(19.99, 120, 1, 21, NULL, TRUE),  -- Basil
+(6.50, 85, 1, 22, NULL, TRUE),    -- Mint
+(8.15, 150, 1, 23, NULL, TRUE),   -- Parsley
+(8.25, 120, 1, 24, NULL, TRUE),   -- Rosemary
+(6.50, 110, 1, 25, NULL, TRUE),   -- Thyme
+(7.90, 200, 1, 26, NULL, TRUE),   -- Oregano
+(24.95, 120, 1, 27, NULL, TRUE),  -- Cilantro
+(18.99, 160, 1, 28, NULL, TRUE),  -- Sage
+(19.99, 120, 1, 29, NULL, TRUE),  -- Dill
+(6.50, 85, 1, 30, NULL, TRUE),    -- Chives
+(8.15, 150, 1, 31, NULL, TRUE),   -- Mixed Salad
+(8.25, 120, 1, 32, NULL, TRUE),   -- Caesar Salad
+(6.50, 110, 1, 33, NULL, TRUE),   -- Greek Salad
+(7.90, 200, 1, 34, NULL, TRUE),   -- Caprese
+(24.95, 120, 1, 35, NULL, TRUE),  -- Arugula Salad
+(18.99, 160, 1, 36, NULL, TRUE),  -- Kale Salad
+(19.99, 120, 1, 37, NULL, TRUE),  -- Spinach Salad
+(6.50, 85, 1, 38, NULL, TRUE),    -- Cobb Salad
+(8.15, 150, 1, 39, NULL, TRUE),   -- Asian Salad
+(8.25, 120, 1, 40, NULL, TRUE),   -- Fruit Salad
+(12.99, 200, 1, 41, NULL, TRUE),  -- Jumbo Cage-Free Eggs - Half Dozen
+(10.99, 180, 1, 42, NULL, TRUE),  -- Large Cage-Free Eggs - Half Dozen
+(8.99, 150, 1, 43, NULL, TRUE),   -- Standard Cage-Free Eggs - Half Dozen
+(9.99, 160, 1, 44, NULL, TRUE),   -- Mixed Grade Cage-Free Eggs - Half Dozen
+(13.99, 150, 1, 45, NULL, TRUE),  -- Jumbo Cage-Free Eggs
+(11.99, 140, 1, 46, NULL, TRUE),  -- Large Cage-Free Eggs
+(9.49, 130, 1, 47, NULL, TRUE),   -- Standard Cage-Free Eggs
+(10.49, 120, 1, 48, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs
+(30.99, 110, 1, 49, NULL, TRUE),  -- Manuka Honey
+(15.99, 100, 1, 50, NULL, TRUE),  -- Clover Honey
+(17.99, 90, 1, 51, NULL, TRUE),   -- Wildflower Honey
+(18.99, 85, 1, 52, NULL, TRUE),   -- Kamahi Honey
+(16.99, 80, 1, 53, NULL, TRUE),   -- Beechwood Honeydew
+
 
 -- Invercargill Depot (depot_id = 2)
-(19.99, 200, 2, 1, NULL),   -- Veggie Delight Box - Small
-(39.99, 140, 2, 2, NULL),   -- Veggie Delight Box - Medium
-(59.99, 70, 2, 3, NULL),    -- Veggie Delight Box - Large
-(19.99, 140, 2, 4, NULL),   -- Fruit Blast Box - Small
-(39.99, 85, 2, 5, NULL),    -- Fruit Blast Box - Medium
-(59.99, 170, 2, 6, NULL),   -- Fruit Blast Box - Large
-(19.99, 100, 2, 7, NULL),   -- Mixed Harvest Box - Small
-(39.99, 85, 2, 8, NULL),    -- Mixed Harvest Box - Medium
-(59.99, 90, 2, 9, NULL),    -- Mixed Harvest Box - Large
-(2.95, 160, 2, 10, NULL),   -- Apple
-(3.45, 200, 2, 11, NULL),   -- Banana
-(1.95, 140, 2, 12, NULL),   -- Orange
-(6.75, 170, 2, 13, NULL),   -- Kiwi
-(3.60, 170, 2, 14, NULL),   -- Blueberry
-(5.55, 95, 2, 15, NULL),    -- Strawberry
-(3.89, 140, 2, 16, NULL),   -- Pear
-(7.99, 160, 2, 17, NULL),   -- Mango
-(7.20, 85, 2, 18, NULL),    -- Grapes
-(8.50, 120, 2, 19, NULL),   -- Cherry
-(1.80, 160, 2, 20, NULL),   -- Potato
-(1.75, 160, 2, 21, NULL),   -- Carrot
-(2.00, 170, 2, 22, NULL),   -- Tomato
-(1.85, 90, 2, 23, NULL),    -- Cucumber
-(4.55, 145, 2, 24, NULL),   -- Pepper
-(8.95, 150, 2, 25, NULL),   -- Broccoli
-(6.50, 110, 2, 26, NULL),   -- Lettuce
-(7.90, 200, 2, 27, NULL),   -- Mushroom
-(24.95, 120, 2, 28, NULL),  -- Spinach
-(18.99, 160, 2, 29, NULL),  -- Onion
-(19.99, 160, 2, 30, NULL),  -- Basil
-(6.50, 110, 2, 31, NULL),   -- Mint
-(8.15, 105, 2, 32, NULL),   -- Parsley
-(8.25, 120, 2, 33, NULL),   -- Rosemary
-(6.50, 110, 2, 34, NULL),   -- Thyme
-(7.90, 200, 2, 35, NULL),   -- Oregano
-(24.95, 120, 2, 36, NULL),  -- Cilantro
-(18.99, 160, 2, 37, NULL),  -- Sage
-(19.99, 160, 2, 38, NULL),  -- Dill
-(6.50, 85, 2, 39, NULL),    -- Chives
-(8.15, 150, 2, 40, NULL),   -- Mixed Salad
-(8.25, 120, 2, 41, NULL),   -- Caesar Salad
-(6.50, 110, 2, 42, NULL),   -- Greek Salad
-(7.90, 200, 2, 43, NULL),   -- Caprese
-(24.95, 120, 2, 44, NULL),  -- Arugula Salad
-(18.99, 160, 2, 45, NULL),  -- Kale Salad
-(19.99, 120, 2, 46, NULL),  -- Spinach Salad
-(6.50, 85, 2, 47, NULL),    -- Cobb Salad
-(8.15, 150, 2, 48, NULL),   -- Asian Salad
-(8.25, 120, 2, 49, NULL),   -- Fruit Salad
-(13.49, 190, 2, 50, NULL),  -- Jumbo Cage-Free Eggs - Half Dozen
-(11.49, 175, 2, 51, NULL),  -- Large Cage-Free Eggs - Half Dozen
-(9.49, 160, 2, 52, NULL),   -- Standard Cage-Free Eggs - Half Dozen
-(10.49, 170, 2, 53, NULL),  -- Mixed Grade Cage-Free Eggs - Half Dozen
-(14.49, 160, 2, 58, NULL),  -- Jumbo Cage-Free Eggs
-(12.49, 150, 2, 59, NULL),  -- Large Cage-Free Eggs
-(10.49, 140, 2, 60, NULL),  -- Standard Cage-Free Eggs
-(11.49, 135, 2, 61, NULL),  -- Mixed Grade Cage-Free Eggs
-(31.99, 115, 2, 66, NULL),  -- Manuka Honey
-(16.99, 105, 2, 67, NULL),  -- Clover Honey
-(18.49, 95, 2, 68, NULL),   -- Wildflower Honey
-(19.49, 90, 2, 69, NULL),   -- Kamahi Honey
-(17.49, 85, 2, 70, NULL),   -- Beechwood Honeydew
+(2.95, 160, 2, 1, NULL, TRUE),   -- Apple
+(3.45, 200, 2, 2, NULL, TRUE),   -- Banana
+(1.95, 140, 2, 3, NULL, TRUE),   -- Orange
+(6.75, 170, 2, 4, NULL, TRUE),   -- Kiwi
+(3.60, 170, 2, 5, NULL, TRUE),   -- Blueberry
+(5.55, 95, 2, 6, NULL, TRUE),    -- Strawberry
+(3.89, 140, 2, 7, NULL, TRUE),   -- Pear
+(7.99, 160, 2, 8, NULL, TRUE),   -- Mango
+(7.20, 85, 2, 9, NULL, TRUE),    -- Grapes
+(8.50, 120, 2, 10, NULL, TRUE),   -- Cherry
+(1.80, 160, 2, 11, NULL, TRUE),   -- Potato
+(1.75, 160, 2, 12, NULL, TRUE),   -- Carrot
+(2.00, 170, 2, 13, NULL, TRUE),   -- Tomato
+(1.85, 90, 2, 14, NULL, TRUE),    -- Cucumber
+(4.55, 145, 2, 15, NULL, TRUE),   -- Pepper
+(8.95, 150, 2, 16, NULL, TRUE),   -- Broccoli
+(6.50, 110, 2, 17, NULL, TRUE),   -- Lettuce
+(7.90, 200, 2, 18, NULL, TRUE),   -- Mushroom
+(24.95, 120, 2, 19, NULL, TRUE),  -- Spinach
+(18.99, 160, 2, 20, NULL, TRUE),  -- Onion
+(19.99, 160, 2, 21, NULL, TRUE),  -- Basil
+(6.50, 110, 2, 22, NULL, TRUE),   -- Mint
+(8.15, 105, 2, 23, NULL, TRUE),   -- Parsley
+(8.25, 120, 2, 24, NULL, TRUE),   -- Rosemary
+(6.50, 110, 2, 25, NULL, TRUE),   -- Thyme
+(7.90, 200, 2, 26, NULL, TRUE),   -- Oregano
+(24.95, 120, 2, 27, NULL, TRUE),  -- Cilantro
+(18.99, 160, 2, 28, NULL, TRUE),  -- Sage
+(19.99, 160, 2, 29, NULL, TRUE),  -- Dill
+(6.50, 85, 2, 30, NULL, TRUE),    -- Chives
+(8.15, 150, 2, 31, NULL, TRUE),   -- Mixed Salad
+(8.25, 120, 2, 32, NULL, TRUE),   -- Caesar Salad
+(6.50, 110, 2, 33, NULL, TRUE),   -- Greek Salad
+(7.90, 200, 2, 34, NULL, TRUE),   -- Caprese
+(24.95, 120, 2, 35, NULL, TRUE),  -- Arugula Salad
+(18.99, 160, 2, 36, NULL, TRUE),  -- Kale Salad
+(19.99, 120, 2, 37, NULL, TRUE),  -- Spinach Salad
+(6.50, 85, 2, 38, NULL, TRUE),    -- Cobb Salad
+(8.15, 150, 2, 39, NULL, TRUE),   -- Asian Salad
+(8.25, 120, 2, 40, NULL, TRUE),   -- Fruit Salad
+(13.49, 190, 2, 41, NULL, TRUE),  -- Jumbo Cage-Free Eggs - Half Dozen
+(11.49, 175, 2, 42, NULL, TRUE),  -- Large Cage-Free Eggs - Half Dozen
+(9.49, 160, 2, 43, NULL, TRUE),   -- Standard Cage-Free Eggs - Half Dozen
+(10.49, 170, 2, 44, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs - Half Dozen
+(14.49, 160, 2, 45, NULL, TRUE),  -- Jumbo Cage-Free Eggs
+(12.49, 150, 2, 46, NULL, TRUE),  -- Large Cage-Free Eggs
+(10.49, 140, 2, 47, NULL, TRUE),  -- Standard Cage-Free Eggs
+(11.49, 135, 2, 48, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs
+(31.99, 115, 2, 49, NULL, TRUE),  -- Manuka Honey
+(16.99, 105, 2, 50, NULL, TRUE),  -- Clover Honey
+(18.49, 95, 2, 51, NULL, TRUE),   -- Wildflower Honey
+(19.49, 90, 2, 52, NULL, TRUE),   -- Kamahi Honey
+(17.49, 85, 2, 53, NULL, TRUE),   -- Beechwood Honeydew
+
 
 
 -- Wellington Depot (depot_id = 3)
-(19.99, 180, 3, 1, NULL),   -- Veggie Delight Box - Small
-(39.99, 150, 3, 2, NULL),   -- Veggie Delight Box - Medium
-(59.99, 85, 3, 3, NULL),    -- Veggie Delight Box - Large
-(19.99, 120, 3, 4, NULL),   -- Fruit Blast Box - Small
-(39.99, 130, 3, 5, NULL),   -- Fruit Blast Box - Medium
-(59.99, 90, 3, 6, NULL),    -- Fruit Blast Box - Large
-(19.99, 110, 3, 7, NULL),   -- Mixed Harvest Box - Small
-(39.99, 90, 3, 8, NULL),    -- Mixed Harvest Box - Medium
-(59.99, 85, 3, 9, NULL),    -- Mixed Harvest Box - Large
-(2.95, 160, 3, 10, NULL),   -- Apple
-(3.30, 85, 3, 11, NULL),    -- Banana
-(5.55, 140, 3, 12, NULL),   -- Orange
-(2.50, 150, 3, 13, NULL),   -- Kiwi
-(4.40, 90, 3, 14, NULL),    -- Blueberry
-(5.55, 110, 3, 15, NULL),   -- Strawberry
-(3.75, 120, 3, 16, NULL),   -- Pear
-(7.99, 85, 3, 17, NULL),    -- Mango
-(7.25, 110, 3, 18, NULL),   -- Grapes
-(7.75, 110, 3, 19, NULL),   -- Cherry
-(1.20, 85, 3, 20, NULL),    -- Potato
-(1.95, 140, 3, 21, NULL),   -- Carrot
-(2.55, 160, 3, 22, NULL),   -- Tomato
-(1.95, 140, 3, 23, NULL),   -- Cucumber
-(4.45, 100, 3, 24, NULL),   -- Pepper
-(7.99, 140, 3, 25, NULL),   -- Broccoli
-(6.50, 120, 3, 26, NULL),   -- Lettuce
-(7.90, 180, 3, 27, NULL),   -- Mushroom
-(24.95, 155, 3, 28, NULL),  -- Spinach
-(18.99, 155, 3, 29, NULL),  -- Onion
-(19.99, 120, 3, 30, NULL),  -- Basil
-(6.50, 85, 3, 31, NULL),    -- Mint
-(8.15, 105, 3, 32, NULL),   -- Parsley
-(8.25, 120, 3, 33, NULL),   -- Rosemary
-(6.50, 110, 3, 34, NULL),   -- Thyme
-(7.90, 200, 3, 35, NULL),   -- Oregano
-(24.95, 120, 3, 36, NULL),  -- Cilantro
-(18.99, 155, 3, 37, NULL),  -- Sage
-(19.99, 120, 3, 38, NULL),  -- Dill
-(6.50, 85, 3, 39, NULL),    -- Chives
-(8.15, 150, 3, 40, NULL),   -- Mixed Salad
-(8.25, 120, 3, 41, NULL),   -- Caesar Salad
-(6.50, 110, 3, 42, NULL),   -- Greek Salad
-(7.90, 180, 3, 43, NULL),   -- Caprese
-(24.95, 120, 3, 44, NULL),  -- Arugula Salad
-(18.99, 155, 3, 45, NULL),  -- Kale Salad
-(19.99, 120, 3, 46, NULL),  -- Spinach Salad
-(6.50, 85, 3, 47, NULL),    -- Cobb Salad
-(8.15, 150, 3, 48, NULL),   -- Asian Salad
-(8.25, 120, 3, 49, NULL),   -- Fruit Salad
-(13.99, 180, 3, 50, NULL),  -- Jumbo Cage-Free Eggs - Half Dozen
-(11.99, 170, 3, 51, NULL),  -- Large Cage-Free Eggs - Half Dozen
-(9.99, 160, 3, 52, NULL),   -- Standard Cage-Free Eggs - Half Dozen
-(10.99, 165, 3, 53, NULL),  -- Mixed Grade Cage-Free Eggs - Half Dozen
-(14.99, 160, 3, 58, NULL),  -- Jumbo Cage-Free Eggs
-(12.99, 155, 3, 59, NULL),  -- Large Cage-Free Eggs
-(10.99, 150, 3, 60, NULL),  -- Standard Cage-Free Eggs
-(11.99, 145, 3, 61, NULL),  -- Mixed Grade Cage-Free Eggs
-(32.99, 120, 3, 66, NULL),  -- Manuka Honey
-(17.99, 110, 3, 67, NULL),  -- Clover Honey
-(19.99, 100, 3, 68, NULL),  -- Wildflower Honey
-(20.99, 95, 3, 69, NULL),   -- Kamahi Honey
-(18.99, 90, 3, 70, NULL),   -- Beechwood Honeydew
+(2.95, 160, 3, 1, NULL, TRUE),   -- Apple
+(3.30, 85, 3, 2, NULL, TRUE),    -- Banana
+(5.55, 140, 3, 3, NULL, TRUE),   -- Orange
+(2.50, 150, 3, 4, NULL, TRUE),   -- Kiwi
+(4.40, 90, 3, 5, NULL, TRUE),    -- Blueberry
+(5.55, 110, 3, 6, NULL, TRUE),   -- Strawberry
+(3.75, 120, 3, 7, NULL, TRUE),   -- Pear
+(7.99, 85, 3, 8, NULL, TRUE),    -- Mango
+(7.25, 110, 3, 9, NULL, TRUE),   -- Grapes
+(7.75, 110, 3, 10, NULL, TRUE),   -- Cherry
+(1.20, 85, 3, 11, NULL, TRUE),    -- Potato
+(1.95, 140, 3, 12, NULL, TRUE),   -- Carrot
+(2.55, 160, 3, 13, NULL, TRUE),   -- Tomato
+(1.95, 140, 3, 14, NULL, TRUE),   -- Cucumber
+(4.45, 100, 3, 15, NULL, TRUE),   -- Pepper
+(7.99, 140, 3, 16, NULL, TRUE),   -- Broccoli
+(6.50, 120, 3, 17, NULL, TRUE),   -- Lettuce
+(7.90, 180, 3, 18, NULL, TRUE),   -- Mushroom
+(24.95, 155, 3, 19, NULL, TRUE),  -- Spinach
+(18.99, 155, 3, 20, NULL, TRUE),  -- Onion
+(19.99, 120, 3, 21, NULL, TRUE),  -- Basil
+(6.50, 85, 3, 22, NULL, TRUE),    -- Mint
+(8.15, 105, 3, 23, NULL, TRUE),   -- Parsley
+(8.25, 120, 3, 24, NULL, TRUE),   -- Rosemary
+(6.50, 110, 3, 25, NULL, TRUE),   -- Thyme
+(7.90, 200, 3, 26, NULL, TRUE),   -- Oregano
+(24.95, 120, 3, 27, NULL, TRUE),  -- Cilantro
+(18.99, 155, 3, 28, NULL, TRUE),  -- Sage
+(19.99, 120, 3, 29, NULL, TRUE),  -- Dill
+(6.50, 85, 3, 30, NULL, TRUE),    -- Chives
+(8.15, 150, 3, 31, NULL, TRUE),   -- Mixed Salad
+(8.25, 120, 3, 32, NULL, TRUE),   -- Caesar Salad
+(6.50, 110, 3, 33, NULL, TRUE),   -- Greek Salad
+(7.90, 180, 3, 34, NULL, TRUE),   -- Caprese
+(24.95, 120, 3, 35, NULL, TRUE),  -- Arugula Salad
+(18.99, 155, 3, 36, NULL, TRUE),  -- Kale Salad
+(19.99, 120, 3, 37, NULL, TRUE),  -- Spinach Salad
+(6.50, 85, 3, 38, NULL, TRUE),    -- Cobb Salad
+(8.15, 150, 3, 39, NULL, TRUE),   -- Asian Salad
+(8.25, 120, 3, 40, NULL, TRUE),   -- Fruit Salad
+(13.99, 180, 3, 41, NULL, TRUE),  -- Jumbo Cage-Free Eggs - Half Dozen
+(11.99, 170, 3, 42, NULL, TRUE),  -- Large Cage-Free Eggs - Half Dozen
+(9.99, 160, 3, 43, NULL, TRUE),   -- Standard Cage-Free Eggs - Half Dozen
+(10.99, 165, 3, 44, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs - Half Dozen
+(14.99, 160, 3, 45, NULL, TRUE),  -- Jumbo Cage-Free Eggs
+(12.99, 155, 3, 46, NULL, TRUE),  -- Large Cage-Free Eggs
+(10.99, 150, 3, 47, NULL, TRUE),  -- Standard Cage-Free Eggs
+(11.99, 145, 3, 48, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs
+(32.99, 120, 3, 49, NULL, TRUE),  -- Manuka Honey
+(17.99, 110, 3, 50, NULL, TRUE),  -- Clover Honey
+(19.99, 100, 3, 51, NULL, TRUE),  -- Wildflower Honey
+(20.99, 95, 3, 52, NULL, TRUE),   -- Kamahi Honey
+(18.99, 90, 3, 53, NULL, TRUE),   -- Beechwood Honeydew
+
 
 -- Hamilton Depot (depot_id = 4)
-(19.99, 170, 4, 1, NULL),   -- Veggie Delight Box - Small
-(39.99, 160, 4, 2, NULL),   -- Veggie Delight Box - Medium
-(59.99, 95, 4, 3, NULL),    -- Veggie Delight Box - Large
-(19.99, 165, 4, 4, NULL),   -- Fruit Blast Box - Small
-(39.99, 110, 4, 5, NULL),   -- Fruit Blast Box - Medium
-(59.99, 95, 4, 6, NULL),    -- Fruit Blast Box - Large
-(19.99, 150, 4, 7, NULL),   -- Mixed Harvest Box - Small
-(39.99, 95, 4, 8, NULL),    -- Mixed Harvest Box - Medium
-(59.99, 85, 4, 9, NULL),    -- Mixed Harvest Box - Large
-(6.20, 95, 4, 10, NULL),    -- Apple
-(3.40, 170, 4, 11, NULL),   -- Banana
-(2.99, 165, 4, 12, NULL),   -- Orange
-(2.65, 120, 4, 13, NULL),   -- Kiwi
-(2.30, 160, 4, 14, NULL),   -- Blueberry
-(5.25, 110, 4, 15, NULL),   -- Strawberry
-(3.75, 95, 4, 16, NULL),    -- Pear
-(7.99, 95, 4, 17, NULL),    -- Mango
-(7.25, 110, 4, 18, NULL),   -- Grapes
-(7.75, 95, 4, 19, NULL),    -- Cherry
-(1.90, 80, 4, 20, NULL),    -- Potato
-(1.85, 75, 4, 21, NULL),    -- Carrot
-(7.45, 120, 4, 22, NULL),   -- Tomato
-(2.00, 90, 4, 23, NULL),    -- Cucumber
-(8.25, 105, 4, 24, NULL),   -- Pepper
-(4.20, 140, 4, 25, NULL),   -- Broccoli
-(6.50, 110, 4, 26, NULL),   -- Lettuce
-(7.90, 200, 4, 27, NULL),   -- Mushroom
-(24.95, 90, 4, 28, NULL),   -- Spinach
-(18.99, 150, 4, 29, NULL),  -- Onion
-(19.99, 90, 4, 30, NULL),   -- Basil
-(6.50, 85, 4, 31, NULL),    -- Mint
-(8.15, 105, 4, 32, NULL),   -- Parsley
-(8.25, 120, 4, 33, NULL),   -- Rosemary
-(6.50, 110, 4, 34, NULL),   -- Thyme
-(7.90, 200, 4, 35, NULL),   -- Oregano
-(24.95, 90, 4, 36, NULL),   -- Cilantro
-(18.99, 150, 4, 37, NULL),  -- Sage
-(19.99, 90, 4, 38, NULL),   -- Dill
-(6.50, 85, 4, 39, NULL),    -- Chives
-(8.15, 105, 4, 40, NULL),   -- Mixed Salad
-(8.25, 120, 4, 41, NULL),   -- Caesar Salad
-(6.50, 110, 4, 42, NULL),   -- Greek Salad
-(7.90, 200, 4, 43, NULL),   -- Caprese
-(24.95, 90, 4, 44, NULL),   -- Arugula Salad
-(18.99, 150, 4, 45, NULL),  -- Kale Salad
-(19.99, 90, 4, 46, NULL),   -- Spinach Salad
-(6.50, 85, 4, 47, NULL),    -- Cobb Salad
-(8.15, 105, 4, 48, NULL),   -- Asian Salad
-(8.25, 120, 4, 49, NULL),   -- Fruit Salad
-(14.49, 185, 4, 50, NULL),  -- Jumbo Cage-Free Eggs - Half Dozen
-(12.49, 175, 4, 51, NULL),  -- Large Cage-Free Eggs - Half Dozen
-(10.49, 165, 4, 52, NULL),   -- Standard Cage-Free Eggs - Half Dozen
-(11.49, 160, 4, 53, NULL),  -- Mixed Grade Cage-Free Eggs - Half Dozen
-(15.49, 155, 4, 58, NULL),  -- Jumbo Cage-Free Eggs
-(13.49, 150, 4, 59, NULL),  -- Large Cage-Free Eggs
-(11.49, 145, 4, 60, NULL),  -- Standard Cage-Free Eggs
-(12.49, 140, 4, 61, NULL),  -- Mixed Grade Cage-Free Eggs
-(33.99, 125, 4, 66, NULL),  -- Manuka Honey
-(18.99, 115, 4, 67, NULL),  -- Clover Honey
-(20.99, 105, 4, 68, NULL),  -- Wildflower Honey
-(21.99, 100, 4, 69, NULL),  -- Kamahi Honey
-(19.99, 95, 4, 70, NULL),   -- Beechwood Honeydew
+(6.20, 95, 4, 1, NULL, TRUE),    -- Apple
+(3.40, 170, 4, 2, NULL , TRUE),   -- Banana
+(2.99, 165, 4, 3, NULL, TRUE),   -- Orange
+(2.65, 120, 4, 4, NULL, TRUE),   -- Kiwi
+(2.30, 160, 4, 5, NULL, TRUE),   -- Blueberry
+(5.25, 110, 4, 6, NULL, TRUE),   -- Strawberry
+(3.75, 95, 4, 7, NULL, TRUE),    -- Pear
+(7.99, 95, 4, 8, NULL, TRUE),    -- Mango
+(7.25, 110, 4, 9, NULL, TRUE),   -- Grapes
+(7.75, 95, 4, 10, NULL, TRUE),    -- Cherry
+(1.90, 80, 4, 11, NULL, TRUE),    -- Potato
+(1.85, 75, 4, 12, NULL, TRUE),    -- Carrot
+(7.45, 120, 4, 13, NULL, TRUE),   -- Tomato
+(2.00, 90, 4, 14, NULL, TRUE),    -- Cucumber
+(8.25, 105, 4, 15, NULL, TRUE),   -- Pepper
+(4.20, 140, 4, 16, NULL, TRUE),   -- Broccoli
+(6.50, 110, 4, 17, NULL, TRUE),   -- Lettuce
+(7.90, 200, 4, 18, NULL, TRUE),   -- Mushroom
+(24.95, 90, 4, 19, NULL, TRUE),   -- Spinach
+(18.99, 150, 4, 20, NULL, TRUE),  -- Onion
+(19.99, 90, 4, 21, NULL, TRUE),   -- Basil
+(6.50, 85, 4, 22, NULL, TRUE),    -- Mint
+(8.15, 105, 4, 23, NULL, TRUE),   -- Parsley
+(8.25, 120, 4, 24, NULL, TRUE),   -- Rosemary
+(6.50, 110, 4, 25, NULL, TRUE),   -- Thyme
+(7.90, 200, 4, 26, NULL, TRUE),   -- Oregano
+(24.95, 90, 4, 27, NULL, TRUE),   -- Cilantro
+(18.99, 150, 4, 28, NULL, TRUE),  -- Sage
+(19.99, 90, 4, 29, NULL, TRUE),   -- Dill
+(6.50, 85, 4, 30, NULL, TRUE),    -- Chives
+(8.15, 105, 4, 31, NULL, TRUE),   -- Mixed Salad
+(8.25, 120, 4, 32, NULL, TRUE),   -- Caesar Salad
+(6.50, 110, 4, 33, NULL, TRUE),   -- Greek Salad
+(7.90, 200, 4, 34, NULL, TRUE),   -- Caprese
+(24.95, 90, 4, 35, NULL, TRUE),   -- Arugula Salad
+(18.99, 150, 4, 36, NULL, TRUE),  -- Kale Salad
+(19.99, 90, 4, 37, NULL, TRUE),   -- Spinach Salad
+(6.50, 85, 4, 38, NULL, TRUE),    -- Cobb Salad
+(8.15, 105, 4, 39, NULL, TRUE),   -- Asian Salad
+(8.25, 120, 4, 40, NULL, TRUE),   -- Fruit Salad
+(14.49, 185, 4, 41, NULL, TRUE),  -- Jumbo Cage-Free Eggs - Half Dozen
+(12.49, 175, 4, 42, NULL, TRUE),  -- Large Cage-Free Eggs - Half Dozen
+(10.49, 165, 4, 43, NULL, TRUE),  -- Standard Cage-Free Eggs - Half Dozen
+(11.49, 160, 4, 44, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs - Half Dozen
+(15.49, 155, 4, 45, NULL, TRUE),  -- Jumbo Cage-Free Eggs
+(13.49, 150, 4, 46, NULL, TRUE),  -- Large Cage-Free Eggs
+(11.49, 145, 4, 47, NULL, TRUE),  -- Standard Cage-Free Eggs
+(12.49, 140, 4, 48, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs
+(33.99, 125, 4, 49, NULL, TRUE),  -- Manuka Honey
+(18.99, 115, 4, 50, NULL, TRUE),  -- Clover Honey
+(20.99, 105, 4, 51, NULL, TRUE),  -- Wildflower Honey
+(21.99, 100, 4, 52, NULL, TRUE),  -- Kamahi Honey
+(19.99, 95, 4, 53, NULL, TRUE),  -- Beechwood Honeydew
+
 
 
 -- Auckland Depot (depot_id = 5)
-(19.99, 170, 5, 1, NULL),   -- Veggie Delight Box - Small
-(39.99, 160, 5, 2, NULL),   -- Veggie Delight Box - Medium
-(59.99, 95, 5, 3, NULL),    -- Veggie Delight Box - Large
-(19.99, 165, 5, 4, NULL),   -- Fruit Blast Box - Small
-(39.99, 110, 5, 5, NULL),   -- Fruit Blast Box - Medium
-(59.99, 95, 5, 6, NULL),    -- Fruit Blast Box - Large
-(19.99, 150, 5, 7, NULL),   -- Mixed Harvest Box - Small
-(39.99, 95, 5, 8, NULL),    -- Mixed Harvest Box - Medium
-(59.99, 85, 5, 9, NULL),    -- Mixed Harvest Box - Large
-(6.20, 95, 5, 10, NULL),    -- Apple
-(3.40, 170, 5, 11, NULL),   -- Banana
-(2.99, 165, 5, 12, NULL),   -- Orange
-(2.65, 120, 5, 13, NULL),   -- Kiwi
-(2.30, 160, 5, 14, NULL),   -- Blueberry
-(5.25, 110, 5, 15, NULL),   -- Strawberry
-(3.75, 95, 5, 16, NULL),    -- Pear
-(7.99, 95, 5, 17, NULL),    -- Mango
-(7.25, 110, 5, 18, NULL),   -- Grapes
-(7.75, 95, 5, 19, NULL),    -- Cherry
-(1.90, 80, 5, 20, NULL),    -- Potato
-(1.85, 75, 5, 21, NULL),    -- Carrot
-(7.45, 120, 5, 22, NULL),   -- Tomato
-(2.00, 90, 5, 23, NULL),    -- Cucumber
-(8.25, 105, 5, 24, NULL),   -- Pepper
-(4.20, 140, 5, 25, NULL),   -- Broccoli
-(6.50, 110, 5, 26, NULL),   -- Lettuce
-(7.90, 200, 5, 27, NULL),   -- Mushroom
-(24.95, 90, 5, 28, NULL),   -- Spinach
-(18.99, 150, 5, 29, NULL),  -- Onion
-(19.99, 90, 5, 30, NULL),   -- Basil
-(6.50, 85, 5, 31, NULL),    -- Mint
-(8.15, 105, 5, 32, NULL),   -- Parsley
-(8.25, 120, 5, 33, NULL),   -- Rosemary
-(6.50, 110, 5, 34, NULL),   -- Thyme
-(7.90, 200, 5, 35, NULL),   -- Oregano
-(24.95, 90, 5, 36, NULL),   -- Cilantro
-(18.99, 150, 5, 37, NULL),  -- Sage
-(19.99, 90, 5, 38, NULL),   -- Dill
-(6.50, 85, 5, 39, NULL),    -- Chives
-(8.15, 105, 5, 40, NULL),   -- Mixed Salad
-(8.25, 120, 5, 41, NULL),   -- Caesar Salad
-(6.50, 110, 5, 42, NULL),   -- Greek Salad
-(7.90, 200, 5, 43, NULL),   -- Caprese
-(24.95, 90, 5, 44, NULL),   -- Arugula Salad
-(18.99, 150, 5, 45, NULL),  -- Kale Salad
-(19.99, 90, 5, 46, NULL),   -- Spinach Salad
-(6.50, 85, 5, 47, NULL),    -- Cobb Salad
-(8.15, 105, 5, 48, NULL),   -- Asian Salad
-(8.25, 120, 5, 49, NULL),   -- Fruit Salad
-(14.99, 190, 5, 50, NULL),  -- Jumbo Cage-Free Eggs - Half Dozen
-(12.99, 180, 5, 51, NULL),  -- Large Cage-Free Eggs - Half Dozen
-(10.99, 170, 5, 52, NULL),  -- Standard Cage-Free Eggs - Half Dozen
-(11.99, 165, 5, 53, NULL),  -- Mixed Grade Cage-Free Eggs - Half Dozen
-(15.99, 160, 5, 58, NULL),  -- Jumbo Cage-Free Eggs
-(13.99, 155, 5, 59, NULL),  -- Large Cage-Free Eggs
-(11.99, 150, 5, 60, NULL),  -- Standard Cage-Free Eggs
-(12.99, 145, 5, 61, NULL),  -- Mixed Grade Cage-Free Eggs
-(34.99, 130, 5, 66, NULL),  -- Manuka Honey
-(19.99, 120, 5, 67, NULL),  -- Clover Honey
-(21.99, 110, 5, 68, NULL),  -- Wildflower Honey
-(22.99, 105, 5, 69, NULL),  -- Kamahi Honey
-(20.99, 100, 5, 70, NULL);  -- Beechwood Honeydew
+(6.20, 95, 5, 1, NULL, TRUE),    -- Apple
+(3.40, 170, 5, 2, NULL, TRUE),   -- Banana
+(2.99, 165, 5, 3, NULL, TRUE),   -- Orange
+(2.65, 120, 5, 4, NULL, TRUE),   -- Kiwi
+(2.30, 160, 5, 5, NULL, TRUE),   -- Blueberry
+(5.25, 110, 5, 6, NULL, TRUE),   -- Strawberry
+(3.75, 95, 5, 7, NULL, TRUE),    -- Pear
+(7.99, 95, 5, 8, NULL, TRUE),    -- Mango
+(7.25, 110, 5, 9, NULL, TRUE),   -- Grapes
+(7.75, 95, 5, 10, NULL, TRUE),   -- Cherry
+(1.90, 80, 5, 11, NULL, TRUE),   -- Potato
+(1.85, 75, 5, 12, NULL, TRUE),   -- Carrot
+(7.45, 120, 5, 13, NULL, TRUE),   -- Tomato
+(2.00, 90, 5, 14, NULL, TRUE),    -- Cucumber
+(8.25, 105, 5, 15, NULL, TRUE),   -- Pepper
+(4.20, 140, 5, 16, NULL, TRUE),   -- Broccoli
+(6.50, 110, 5, 17, NULL, TRUE),   -- Lettuce
+(7.90, 200, 5, 18, NULL, TRUE),   -- Mushroom
+(24.95, 90, 5, 19, NULL, TRUE),   -- Spinach
+(18.99, 150, 5, 20, NULL, TRUE),  -- Onion
+(19.99, 90, 5, 21, NULL, TRUE),   -- Basil
+(6.50, 85, 5, 22, NULL, TRUE),    -- Mint
+(8.15, 105, 5, 23, NULL, TRUE),   -- Parsley
+(8.25, 120, 5, 24, NULL, TRUE),   -- Rosemary
+(6.50, 110, 5, 25, NULL, TRUE),   -- Thyme
+(7.90, 200, 5, 26, NULL, TRUE),   -- Oregano
+(24.95, 90, 5, 27, NULL, TRUE),   -- Cilantro
+(18.99, 150, 5, 28, NULL, TRUE),  -- Sage
+(19.99, 90, 5, 29, NULL, TRUE),   -- Dill
+(6.50, 85, 5, 30, NULL, TRUE),    -- Chives
+(8.15, 105, 5, 31, NULL, TRUE),   -- Mixed Salad
+(8.25, 120, 5, 32, NULL, TRUE),   -- Caesar Salad
+(6.50, 110, 5, 33, NULL, TRUE),   -- Greek Salad
+(7.90, 200, 5, 34, NULL, TRUE),   -- Caprese
+(24.95, 90, 5, 35, NULL, TRUE),   -- Arugula Salad
+(18.99, 150, 5, 36, NULL, TRUE),  -- Kale Salad
+(19.99, 90, 5, 37, NULL, TRUE),   -- Spinach Salad
+(6.50, 85, 5, 38, NULL, TRUE),    -- Cobb Salad
+(8.15, 105, 5, 39, NULL, TRUE),   -- Asian Salad
+(8.25, 120, 5, 40, NULL, TRUE),   -- Fruit Salad
+(14.99, 190, 5, 41, NULL, TRUE),  -- Jumbo Cage-Free Eggs - Half Dozen
+(12.99, 180, 5, 42, NULL, TRUE),  -- Large Cage-Free Eggs - Half Dozen
+(10.99, 170, 5, 43, NULL, TRUE),  -- Standard Cage-Free Eggs - Half Dozen
+(11.99, 165, 5, 44, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs - Half Dozen
+(15.99, 160, 5, 45, NULL, TRUE),  -- Jumbo Cage-Free Eggs
+(13.99, 155, 5, 46, NULL, TRUE),  -- Large Cage-Free Eggs
+(11.99, 150, 5, 47, NULL, TRUE),  -- Standard Cage-Free Eggs
+(12.99, 145, 5, 48, NULL, TRUE),  -- Mixed Grade Cage-Free Eggs
+(34.99, 130, 5, 49, NULL, TRUE),  -- Manuka Honey
+(19.99, 120, 5, 50, NULL, TRUE),  -- Clover Honey
+(21.99, 110, 5, 51, NULL, TRUE),  -- Wildflower Honey
+(22.99, 105, 5, 52, NULL, TRUE),  -- Kamahi Honey
+(20.99, 100, 5, 53, NULL, TRUE);  -- Beechwood Honeydew
+
     
     
-INSERT INTO box_subscription (frequency) VALUES
+INSERT INTO box_frequency  (frequency) VALUES
 ('Weekly'),
 ('Fortnightly'),
 ('Monthly');     
 
 
-INSERT INTO box_size (size_name, max_num, price, description) VALUES
-('small', 5, 19.99, 'Small box containing up to 5 kg, suitable for individuals or small families'),
-('medium', 10, 39.99, 'Medium box containing up to 10 kg, suitable for medium-sized families or groups'),
-('large', 15, 59.99, 'Large box containing up to 15 kg, suitable for large families or gatherings');
+INSERT INTO box_size (size_name, price, description) VALUES
+('Small', 19.99, 'Small box containing up to 5 kg, suitable for individuals or small families'),
+('Medium', 39.99, 'Medium box containing up to 10 kg, suitable for medium-sized families or groups'),
+('Large', 59.99, 'Large box containing up to 15 kg, suitable for large families or gatherings');
 
 
-INSERT INTO box (product_id, box_size_id, is_active) VALUES
+INSERT INTO box_category (category) VALUES
+('Fruits'),
+('Vegetables'),
+('Mixed');
 
-(1, 1, TRUE),
-(2, 2, TRUE),
-(3, 3, TRUE),
-(4, 1, TRUE),
-(5, 2, TRUE),
-(6, 3, TRUE),
-(7, 1, TRUE),
-(8, 2, TRUE),
-(9, 3, TRUE),
-
-(63, 1, TRUE),
-(64, 2, TRUE),
-(65, 3, TRUE),
-(66, 1, TRUE),
-(67, 2, TRUE),
-(68, 3, TRUE),
-(69, 1, TRUE),
-(70, 2, TRUE),
-(71, 3, TRUE),
-
-
-(125, 1, TRUE),
-(126, 2, TRUE),
-(127, 3, TRUE),
-(128, 1, TRUE),
-(129, 2, TRUE),
-(130, 3, TRUE),
-(131, 1, TRUE),
-(132, 2, TRUE),
-(133, 3, TRUE),
-
-(187, 1, TRUE),
-(188, 2, TRUE),
-(189, 3, TRUE),
-(190, 1, TRUE),
-(191, 2, TRUE),
-(192, 3, TRUE),
-(193, 1, TRUE),
-(194, 2, TRUE),
-(195, 3, TRUE),
-
-
-(249, 1, TRUE),
-(250, 2, TRUE),
-(251, 3, TRUE),
-(252, 1, TRUE),
-(253, 2, TRUE),
-(254, 3, TRUE),
-(255, 1, TRUE),
-(256, 2, TRUE),
-(257, 3, TRUE);
-    
- INSERT INTO box_content (box_id, product_id, quantity) VALUES
--- Veggie Delight Box - Small
-(1, 11, 2),  -- Potato x2
-(1, 12, 1),  -- Carrot x1
-(1, 13, 1),  -- Tomato x1
-(1, 14, 1),  -- Cucumber x1
-(1, 15, 1),  -- Pepper x1
--- Veggie Delight Box - Medium
-(2, 11, 4),  -- Potato x4
-(2, 12, 3),  -- Carrot x3
-(2, 13, 2),  -- Tomato x2
-(2, 14, 2),  -- Cucumber x2
-(2, 15, 2),  -- Pepper x2
--- Veggie Delight Box - Large
-(3, 11, 6),  -- Potato x6
-(3, 12, 4),  -- Carrot x4
-(3, 13, 3),  -- Tomato x3
-(3, 14, 3),  -- Cucumber x3
-(3, 15, 3),  -- Pepper x3
--- Fruit Blast Box - Small
-(4, 6, 1),   -- Strawberry x1
-(4, 7, 2),   -- Pear x2
-(4, 8, 1),   -- Mango x1
-(4, 9, 2),   -- Grapes x2
-(4, 10, 1),  -- Blueberry x1
--- Fruit Blast Box - Medium
-(5, 6, 2),   -- Strawberry x2
-(5, 7, 3),   -- Pear x3
-(5, 8, 2),   -- Mango x2
-(5, 9, 3),   -- Grapes x3
-(5, 10, 2),  -- Blueberry x2
--- Fruit Blast Box - Large
-(6, 6, 3),   -- Strawberry x3
-(6, 7, 4),   -- Pear x4
-(6, 8, 3),   -- Mango x3
-(6, 9, 4),   -- Grapes x4
-(6, 10, 3),  -- Blueberry x3   
- -- Mixed Harvest Box - Small   
-(7, 1, 2),   -- Apple x2
-(7, 2, 1),   -- Banana x1
-(7, 6, 1),   -- Strawberry x1
-(7, 11, 1),  -- Potato x1
-(7, 12, 1),  -- Carrot x1    
--- Mixed Harvest Box - Medium
-(8, 1, 3),   -- Apple x3
-(8, 2, 2),   -- Banana x2
-(8, 6, 2),   -- Strawberry x2
-(8, 11, 2),  -- Potato x2
-(8, 12, 2),  -- Carrot x2
--- Mixed Harvest Box - Large
-(9, 1, 4),   -- Apple x4
-(9, 2, 3),   -- Banana x3
-(9, 6, 3),   -- Strawberry x3
-(9, 11, 3),  -- Potato x3
-(9, 12, 3);  -- Carrot x3    
-    
-    
+  
 INSERT INTO order_status (status_name, description) VALUES
 ('Confirmed', 'The order has been confirmed by the customer.'),
-('Processing', 'The order is being processed and packed.'),
-('Shipped', 'The order has been shipped and is on its way to the customer.'),
-('Delivered', 'The order has been delivered to the customer.'),
-('On Hold', 'The order is on hold.'),
-('Cancelled', 'The order has been cancelled.');    
+('Processing', 'The order is being processed.'),
+('Dispatched', 'The order has been shipped and is on its way to the customer.'),
+('Received', 'Customer received the order.'),
+('Cancelled', 'The order has been cancelled.'); 
     
     
 INSERT INTO shipping_option (shipping_option_name, price, is_active) VALUES
 ('Standard', 6.00, TRUE),  -- Standard shipping typically takes longer but costs less
-('Express', 15.00, TRUE),  -- Express shipping is faster and costs more
-('Free Shipping', 0.00, TRUE);  -- An option for promotional or threshold-based free shipping    
+('Rural', 15.00, TRUE);  -- Rural shipping is for delivery further than 50kms from the depot  
     
+    
+INSERT INTO order_hdr (user_id, order_date, total_price, status_id, shipping_option_id, purpose) VALUES
+(12, '2024-05-01', 59.99, 1, 1, 'order'), -- Customer 1 at Christchurch
+(13, '2024-05-02', 115.80, 1, 1, 'order'), -- Customer 2 at Christchurch
+(14, '2024-05-03', 39.99, 1, 2 , 'order'), -- Customer 1 at Invercargill
+(15, '2024-05-04', 79.99, 1, 1, 'order'), -- Customer 2 at Invercargill
+(16, '2024-05-05', 24.95, 1, 2, 'order'), -- Customer 1 at Wellington
+(17, '2024-05-06', 47.90, 1, 2, 'order'), -- Customer 2 at Wellington
+(18, '2024-05-07', 99.95, 1, 1, 'order'), -- Customer 1 at Hamilton
+(19, '2024-05-08', 63.99, 1, 1, 'order'), -- Customer 2 at Hamilton
+(20, '2024-05-09', 49.95, 1, 1, 'order'), -- Customer 1 at Auckland
+(21, '2024-05-10', 35.90, 1, 2, 'order'); -- Customer 2 at Auckland
+
+
+INSERT INTO order_detail (order_hdr_id, product_id, quantity, line_total_price) VALUES
+-- Order 1
+(1, 3, 1, 59.99), -- Veggie Delight Box - Large
+-- Order 2
+(2, 4, 2, 39.99), -- Fruit Blast Box - Small
+(2, 14, 1, 35.90), -- Blueberry
+(2, 16, 1, 39.99), -- Pear
+-- Order 3
+(3, 5, 1, 39.99), -- Fruit Blast Box - Medium
+-- Order 4
+(4, 6, 1, 59.99), -- Fruit Blast Box - Large
+(4, 10, 2, 20.00), -- Blueberry
+-- Order 5
+(5, 28, 1, 24.95), -- Spinach
+-- Order 6
+(6, 5, 1, 39.99), -- Fruit Blast Box - Medium
+(6, 16, 1, 7.90), -- Pear
+-- Order 7
+(7, 3, 1, 59.99), -- Veggie Delight Box - Large
+(7, 14, 1, 39.99), -- Blueberry
+-- Order 8
+(8, 5, 1, 39.99), -- Fruit Blast Box - Medium
+(8, 28, 1, 24.00), -- Spinach
+-- Order 9
+(9, 6, 1, 39.99), -- Fruit Blast Box - Large
+(9, 10, 1, 10.00), -- Blueberry
+-- Order 10
+(10, 5, 1, 19.95), -- Fruit Blast Box - Medium
+(10, 16, 1, 15.95); -- Pear
+
+
+
+INSERT INTO depot_order (order_hdr_id, depot_id) VALUES
+(1, 1), -- Christchurch
+(2, 1), -- Christchurch
+(3, 2), -- Invercargill
+(4, 2), -- Invercargill
+(5, 3), -- Wellington
+(6, 3), -- Wellington
+(7, 4), -- Hamilton
+(8, 4), -- Hamilton
+(9, 5), -- Auckland
+(10, 5); -- Auckland
     
 INSERT INTO payment_method (method_description) VALUES
 ('Credit Card'),  -- Widely accepted, includes Visa, MasterCard, American Express, etc.
@@ -724,10 +622,10 @@ INSERT INTO message_status (message_status_id, status_name, description) VALUES
 
 INSERT INTO message_category (message_category_id, message_category_name, description) VALUES
 (1, 'Notification', 'Includes any sort of messages from Welcome message to order status notification'),
-(2, 'Enquiry', 'Enquiry to Staff');
-    
-    
-    
+(2, 'General Enquiry', 'Enquiry to Staff'),
+(3, 'Order Enquiry', 'Enquiry about a specific order to Staff'),
+(4, 'Issues on Product delivered', 'Notify to Staff issues with product delivered');
+
     
     
     

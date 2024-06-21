@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Trigger Subscription Orders{% endblock %}
+{% block content %}
+
+<div class="container content" style="flex: 1 0 auto;">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12 mb-3">
+                <a href="{{ url_for('local_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer;">
+                    &lt;&lt; Dashboard</a>
+            </div>
+            <h1>Trigger Subscription Orders</h1>
+            <hr>
+            <form method="POST" action="{{ url_for('local_manager.create_subcription_orders') }}">
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr class="table-primary">
+                                          <th>Depot</th>
+                                          <th>Customer</th>
+                                          <th>Frequency</th>
+                                          <th>Category</th>
+                                          <th>Box Size</th>
+                                      </tr>
+                            </thead>
+                            <tbody>
+                            {% if no_boxes_available_to_trigger %}
+                                {% if customer_subscriptions %}
+                                    {% for customer_subscription in customer_subscriptions %}
+                                        <tr>
+                                            <td>{{ customer_subscription[0] }}</td>
+                                            <td>{{ customer_subscription[1] }} {{ customer_subscription[2] }}</td>
+                                            <td>{{ customer_subscription[3] }}</td>
+                                            <td>{{ customer_subscription[4] }}</td>
+                                            <td>{{ customer_subscription[5] }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% else %}
+                                        <tr>
+                                            <td colspan="7"> <!-- Use colspan to make the cell span across all columns -->
+                                                <div class="alert alert-info" role="alert">
+                                                    There are no subscription orders to be triggered.
+                                                </div>
+                                            </td>
+                                        </tr>
+                                {% endif %}
+                            {% else %}
+                                {% if subscriptions %}
+                                    {% for subscription in subscriptions %}
+                                        <tr>
+                                    <td>{{ subscription[0] }}</td>
+                                    <td>{{ subscription[7] }} {{ subscription[8] }}</td>
+                                    <td>{{ subscription[3] }}</td>
+                                    <td>{{ subscription[4] }}</td>
+                                    <td>{{ subscription[5] }}</td>
+                                            </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7"> <!-- Use colspan to make the cell span across all columns -->
+                                            <div class="alert alert-info" role="alert">
+                                        There are no subscription orders to be triggered.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            {% endif %}
+                            </tbody>
+                        </table>
+                        <div class="form-group mb-3">
+                            {% if no_boxes_available_to_trigger and customer_subscriptions %}
+                                <p>The above boxes have been subscribed but box products haven't been created! Create boxes before triggering!</p>
+                                <a href="{{ url_for('local_manager.create_box') }}" class="btn btn-primary btn-sm">Create a box</a>
+                            {% elif subscriptions %}
+                                <button type="submit" class="btn btn-primary btn-sm">Trigger Order</button>
+                            {% endif %}
+                            <a href="{{ url_for('local_manager.dashboard') }}" class="btn btn-sm btn-primary">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -8,22 +8,37 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
-<body>
+<body class="{% block body_class %}
+    {% if session['user_role_id'] == 1 %}
+        customer
+    {% elif session['user_role_id'] == 2 %}
+        account-holder
+    {% elif session['user_role_id'] == 3 %}
+        staff
+    {% elif session['user_role_id'] == 4 %}
+        local-manager
+    {% elif session['user_role_id'] == 5 %}
+        national-manager
+    {% else %}
+        default
+    {% endif %}
+{% endblock %}">
     <!-- Navigation block -->
     {% block navigation %}
-
     <nav class="navbar navbar-dark d-flex sticky-top">
         <a class="navbar-brand" href="{{url_for('main.home') }}">Fresh Harvest Delivery</a>
         <ul>
             {% set total_quantity = namespace(quantity=0) %}
             {% if session['shoppingcart'] %}
-                {% for key, product in session['shoppingcart'].items() %}
-                    {% set total_quantity.quantity = total_quantity.quantity + product.quantity|int %}
-                {% endfor %}
+                {% set total_quantity.quantity = session['shoppingcart'] | length %}
+                {# 
+                    {% for key, product in session['shoppingcart'].items() %}
+                        {% set total_quantity.quantity = total_quantity.quantity + product.quantity|int %}
+                    {% endfor %}
+                #}
             {% endif %}
             {% if session['loggedin'] %}
                 {% if session['user_role_id'] == 1 %} <!--customer-->
@@ -52,7 +67,7 @@
                 <li><a class="nav-link text-white" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a></li>
                 {% elif session['user_role_id'] == 5 %} <!--national Manager-->
                 <li><a class="nav-link text-white" href="{{ url_for('national_manager.dashboard') }}"><i class="fa fa-home"></i> Dashboard</a></li>
-                <li><a class="nav-link text-white" href="{{ url_for('national_manager.getMessages') }}"><i class="fa fa-envelope"></i> Mail </a></li>
+                <li><a class="nav-link text-white" href="{{ url_for('national_manager.nm_getMessages') }}"><i class="fa fa-envelope"></i> Mail </a></li>
                 <li><a class="nav-link text-white" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a></li>
                 {% endif %}
             {% else %}
@@ -62,7 +77,6 @@
             {% endif %}
         </ul>
     </nav>
-    
     {% endblock %}
 
     <!-- Content Block-->

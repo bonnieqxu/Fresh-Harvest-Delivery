@@ -12,6 +12,11 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('national_manager.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Shipping Option</h1>
             <hr>
                   <br>
@@ -21,18 +26,12 @@
                               <tr class="table-primary">
                                   <th>Shipping Option</th>
                                   <th>Price</th>
-                                  <th>Status</th>
                                   <th>Edit</th>
                               </tr>
                               {% for shipping in shipping_option %}
                                   <tr>
                                       <td>{{ shipping[1] if shipping[1] is not none }}</td>
                                       <td>${{ shipping[2] if shipping[2] is not none }}</td>
-                                      <td> {% if shipping[3] == 1 %}
-                                                Active
-                                            {% else %}
-                                                Inactive
-                                            {% endif %}</td>
                                       <td><a href="{{ url_for('national_manager.edit_shipping_option', shipping_option_id=shipping[0]) }}" class="btn btn-sm btn-primary">Edit</a></td>
                                       </tr>
                               {% endfor %}

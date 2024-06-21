@@ -4,6 +4,11 @@
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="col-12">
+                <a href="{{ url_for('account_holder.dashboard') }}"
+                    style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                    &lt;&lt; Dashboard</a>
+            </div>
             <h1>Credit Limit</h1>
             <hr>
             <div class="card mt-3">
@@ -17,9 +22,9 @@
                 <div class="card-body">
                     <h5 class="card-title">Credit Limit Information</h5>
                     <hr>
-                    <p><strong>Current Credit Limit Per Month:</strong> ${{ current_limit }}</p>
+                    <p><strong>Current Credit Limit:</strong> ${{ current_limit }}</p>
                     <p><strong>Current Balance:</strong> ${{ current_balance }}</p>
-                    <p><strong>Remaining Credit For This Month:</strong> 
+                    <p><strong>Remaining Credit:</strong> 
                         <span style="{% if remaining_credit <= 100 %}color: red; font-weight: bold;{% endif %}">
                             ${{ remaining_credit }}
                         </span>

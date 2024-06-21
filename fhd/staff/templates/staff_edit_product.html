@@ -1,32 +1,97 @@
 {% extends "base.html" %}
-{% block title %}{% endblock %}
+{% block title %}Edit Product{% endblock %}
 {% block content %}
 
 <div class="container content" style="flex: 1 0 auto;">
     <div class="row">
         <div class="col-lg-8 offset-lg-2 my-5">
+            <div class="row">
+                <a href="{{ url_for('staff.staff_product_list', depot_id=session['user_depot']) }}"
+                style="text-decoration: underline; color: #007bff; cursor: pointer; margin-bottom: 20px; display: inline-block;">
+                &lt;&lt; Back to View Product</a>
+            </div>
             <h1>{{ product[1] }}</h1>
             <hr>
-            
-            <form method="POST" action="{{ url_for('staff.staff_edit_product', product_id=product_id) }}" enctype="multipart/form-data">
-                {{ form.csrf_token }}
-                <div class="form-group mb-3">
-                    {{ form.product_price.label }} ($)
-                    {{ form.product_price(class="form-control") }}
+            <div class="row">
+                <div class="col-lg-6">
+                    <form id="product-form" method="POST" action="{{ url_for('staff.staff_edit_product', product_id=product_id) }}" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        <div class="form-group mb-3">
+                            {{ form.product_price.label }} ($)
+                            {{ form.product_price(class="form-control") }}
+                        </div>
+                        <div class="form-group mb-3">
+                            {{ form.product_quantity.label }}
+                            {{ form.product_quantity(class="form-control", id="product_quantity") }}
+                        </div>
+                        <div class="form-group mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="discontinued" name="discontinued" {% if product[4] == 0 %}checked{% endif %}>
+                            <label class="form-check-label" for="discontinued">Discontinued</label>
+                        </div>
+                        <hr>
+                        <div class="form-group mb-3">
+                            <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group mb-3">
-                    {{ form.product_quantity.label }}
-                    {{ form.product_quantity(class="form-control") }}
+                <div class="col-lg-6">
+                    <!-- Form for Removing Perished Products -->
+                    <form id="remove-perished-form" method="POST" action="{{ url_for('staff.staff_remove_perished_product', product_id=product_id) }}" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        <div class="form-group mb-3">
+                            <label for="perished_quantity">Remove Perished Product</label>
+                            <input type="number" id="perished_quantity" name="perished_quantity" class="form-control" min="1" data-product-quantity="{{ product[2] }}" required>
+                        </div>
+                        <hr>
+                        <div class="form-group mb-3">
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </div>
+                    </form>
                 </div>
-                <hr>
-                <div class="form-group mb-3">
-                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
-                    <a href="{{ url_for('staff.staff_product_list', depot_id=session['user_depot']) }}" class="btn btn-sm btn-primary">Back</a>
-                </div>
-            </form>
-            
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Function to set the product quantity field as readonly if discontinued is checked
+    function toggleReadOnly() {
+        const discontinuedCheckbox = document.getElementById('discontinued');
+        const productQuantityInput = document.getElementById('product_quantity');
+        if (discontinuedCheckbox.checked) {
+            productQuantityInput.readOnly = true;
+            productQuantityInput.classList.add('readonly');
+        } else {
+            productQuantityInput.readOnly = false;
+            productQuantityInput.classList.remove('readonly');
+        }
+    }
+
+    // Initial call to set the state on page load
+    toggleReadOnly();
+
+    // Add event listener to the discontinued checkbox
+    document.getElementById('discontinued').addEventListener('change', toggleReadOnly);
+
+    // Confirmation scripts
+    document.getElementById('product-form').addEventListener('submit', function(event) {
+        const discontinuedCheckbox = document.getElementById('discontinued');
+        if (discontinuedCheckbox.checked) {
+            const confirmAction = confirm("You are about to discontinue this Product");
+            if (!confirmAction) {
+                event.preventDefault(); // Prevent the form from submitting
+            }
+        }
+    });
+
+    document.getElementById('remove-perished-form').addEventListener('submit', function(event) {
+        const perishedQuantity = document.getElementById('perished_quantity').value;
+        const productName = "{{ product[1] }}";
+        const confirmAction = confirm(`You are about to remove ${perishedQuantity} ${productName}`);
+        if (!confirmAction) {
+            event.preventDefault(); // Prevent the form from submitting
+        }
+    });
+</script>
 
 {% endblock %}
